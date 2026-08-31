@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | ROGASREE MART</title>
+</head>
+
+<body>
+
+    <h1>My Wishlist</h1>
+
+    <div id="wishlistItems">
+        <p>Your wishlist is empty.</p>
+    </div>
+
+    <script>
+function displayWishlist() {
+    let wishlist = JSON.parse(localStorage.getItem("rogasreeWishlist")) || [];
+
+    let wishlistItems = document.getElementById("wishlistItems");
+
+    if (wishlist.length === 0) {
+        wishlistItems.innerHTML = "<p>Your wishlist is empty.</p>";
+        return;
+    }
+
+    wishlistItems.innerHTML = "";
+
+    wishlist.forEach(function(item) {
+        wishlistItems.innerHTML +=
+        wishlistItems.innerHTML += "<div><b>" + item + "</b> <button onclick=\"removeFromWishlist('" + item + "')\">Remove</button></div>";
+    });
+}
+
+function removeFromWishlist(productName) {
+    let wishlist = JSON.parse(localStorage.getItem("rogasreeWishlist")) || [];
+
+    wishlist = wishlist.filter(function(item) {
+        return item !== productName;
+    });
+
+    localStorage.setItem("rogasreeWishlist", JSON.stringify(wishlist));
+
+    displayWishlist();
+}
+
+displayWishlist();
+    </script>
+
+</body>
+</html>

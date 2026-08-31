@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Buyer Login | ROGASREE MART</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-page">
+
+    <!-- Top Brand Area -->
+    <header class="login-header">
+
+        <a href="index.html" class="back-brand">
+            <div class="brand-mark">R</div>
+
+            <div>
+                <h1>ROGASREE MART</h1>
+                <p>Discover. Choose. Enjoy.</p>
+            </div>
+        </a>
+
+        <a href="index.html" class="back-link">
+            ← Back to roles
+        </a>
+
+    </header>
+
+
+    <!-- Login Area -->
+    <main class="login-container">
+
+        <!-- Left Information -->
+        <section class="login-intro">
+
+            <span class="login-label">
+                BUYER ACCESS
+            </span>
+
+            <h2>
+                Welcome back,
+                <span>shopper.</span>
+            </h2>
+
+            <p>
+                Sign in to discover products, manage your
+                wishlist, track your orders, and enjoy your
+                shopping journey with ROGASREE MART.
+            </p>
+
+            <div class="login-highlight">
+                <span>✦</span>
+
+                <div>
+                    <strong>One account. Endless choices.</strong>
+                    <small>Everything you love, just a sign-in away.</small>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Login Form -->
+        <section class="login-card">
+
+            <div class="form-heading">
+
+                <span>BUYER LOGIN</span>
+
+                <h3>Sign in to continue</h3>
+
+                <p>
+                    Enter your registered account details below.
+                </p>
+
+            </div>
+
+
+            <form id="buyerLoginForm">
+
+                <!-- Email -->
+                <div class="input-group">
+
+                    <label for="buyerEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="buyerEmail"
+                        placeholder="Enter your registered email"
+                        required
+                    >
+
+                    <small
+                        class="error-message"
+                        id="emailError">
+                    </small>
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="input-group">
+
+                    <label for="buyerPassword">
+                        Password
+                    </label>
+
+                    <div class="password-box">
+
+                        <input
+                            type="password"
+                            id="buyerPassword"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword">
+                            Show
+                        </button>
+
+                    </div>
+
+                    <small
+                        class="error-message"
+                        id="passwordError">
+                    </small>
+
+                </div>
+
+
+                <!-- Remember / Forgot -->
+                <div class="login-options">
+
+                    <label class="remember-option">
+
+                        <input
+                            type="checkbox"
+                            id="rememberMe">
+
+                        <span>Remember me</span>
+
+                    </label>
+
+                    <a href="#" onclick="showForgotMessage(); return false;">
+                        Forgot password?
+                    </a>
+
+                </div>
+
+
+                <!-- Login Button -->
+                <button
+                    type="submit"
+                    class="login-button">
+
+                    Login as Buyer
+
+                    <span>→</span>
+
+                </button>
+
+
+                <div class="divider">
+                    <span>or continue with</span>
+                </div>
+
+
+                <!-- Social Login -->
+                <div class="social-buttons">
+
+                    <button
+                        type="button"
+                        class="social-button"
+                        onclick="showDemoMessage('Google')">
+
+                        <strong>G</strong>
+                        Google
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="social-button"
+                        onclick="showDemoMessage('Apple')">
+
+                        <strong>●</strong>
+                        Apple
+
+                    </button>
+
+                </div>
+
+
+                <!-- Signup -->
+                <p class="signup-text">
+
+                    New to ROGASREE MART?
+
+                    <a href="register.html">
+                        Create an account
+                    </a>
+
+                </p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="login-footer">
+
+        <span>
+            © 2026 ROGASREE MART
+        </span>
+
+        <span>
+            Create an account first, then login with your
+            registered email and password.
+        </span>
+
+    </footer>
+
+
+    <script>
+
+        /* ================================
+           SHOW / HIDE PASSWORD
+        ================================= */
+
+        const passwordInput =
+            document.getElementById("buyerPassword");
+
+        const togglePassword =
+            document.getElementById("togglePassword");
+
+
+        togglePassword.addEventListener("click", function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+                togglePassword.textContent = "Hide";
+
+            } else {
+
+                passwordInput.type = "password";
+                togglePassword.textContent = "Show";
+
+            }
+
+        });
+
+
+        /* ================================
+           LOGIN
+        ================================= */
+
+        const loginForm =
+            document.getElementById("buyerLoginForm");
+
+
+        loginForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document.getElementById("buyerEmail").value.trim();
+
+            const password =
+                document.getElementById("buyerPassword").value;
+
+
+            const emailError =
+                document.getElementById("emailError");
+
+            const passwordError =
+                document.getElementById("passwordError");
+
+
+            emailError.textContent = "";
+            passwordError.textContent = "";
+
+
+            let isValid = true;
+
+
+            /* Email validation */
+
+            if (email === "") {
+
+                emailError.textContent =
+                    "Please enter your registered email.";
+
+                isValid = false;
+
+            }
+
+
+            /* Password validation */
+
+            if (password === "") {
+
+                passwordError.textContent =
+                    "Please enter your password.";
+
+                isValid = false;
+
+            }
+
+
+            if (!isValid) {
+                return;
+            }
+
+
+            /* ================================
+               CHECK REGISTERED ACCOUNT
+            ================================= */
+
+            const registeredEmail =
+                localStorage.getItem("registeredEmail");
+
+            const registeredPassword =
+                localStorage.getItem("registeredPassword");
+
+
+            /* No registration found */
+
+            if (!registeredEmail || !registeredPassword) {
+
+                alert(
+                    "No account found. Please create an account first."
+                );
+
+                window.location.href = "register.html";
+
+                return;
+            }
+
+
+            /* Check email and password */
+
+            if (
+                email === registeredEmail &&
+                password === registeredPassword
+            ) {
+
+                /* Save login status */
+
+                localStorage.setItem(
+                    "isLoggedIn",
+                    "true"
+                );
+
+                localStorage.setItem(
+                    "loggedInEmail",
+                    email
+                );
+
+
+                alert("Login successful!");
+
+
+                /* Go to Home */
+
+                window.location.href = "home.html";
+
+            } else {
+
+                alert(
+                    "Invalid email or password. Please use your registered details."
+                );
+
+            }
+
+        });
+
+
+        /* ================================
+           FORGOT PASSWORD
+        ================================= */
+
+        function showForgotMessage() {
+
+            alert(
+                "Please use your registered email. Password recovery will be added later."
+            );
+
+        }
+
+
+        /* ================================
+           GOOGLE / APPLE DEMO
+        ================================= */
+
+        function showDemoMessage(provider) {
+
+            alert(
+                provider +
+                " login is currently not available."
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

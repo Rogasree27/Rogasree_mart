@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Seller Login | ROGASREE MART</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="seller-login-page">
+
+    <!-- Header -->
+    <header class="seller-header">
+
+        <a href="index.html" class="seller-brand">
+
+            <div class="seller-mark">
+                R
+            </div>
+
+            <div>
+                <h1>ROGASREE MART</h1>
+                <p>Seller Centre</p>
+            </div>
+
+        </a>
+
+
+        <a href="index.html" class="seller-back">
+            ← Back to roles
+        </a>
+
+    </header>
+
+
+    <!-- Main -->
+    <main class="seller-container">
+
+        <!-- Seller Information -->
+        <section class="seller-intro">
+
+            <div class="seller-badge">
+                SELLER CENTRE
+            </div>
+
+            <h2>
+                Build your store.
+                <span>Grow your reach.</span>
+            </h2>
+
+            <p>
+                Sign in to manage your products, monitor orders,
+                view sales performance, and take your marketplace
+                business further.
+            </p>
+
+
+            <div class="seller-points">
+
+                <div class="seller-point">
+
+                    <span>01</span>
+
+                    <div>
+                        <strong>Manage products</strong>
+                        <small>
+                            Add and organize your products easily.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="seller-point">
+
+                    <span>02</span>
+
+                    <div>
+                        <strong>Track orders</strong>
+                        <small>
+                            Keep an eye on incoming customer orders.
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="seller-point">
+
+                    <span>03</span>
+
+                    <div>
+                        <strong>Watch your growth</strong>
+                        <small>
+                            View sales and revenue information.
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Seller Login Card -->
+        <section class="seller-login-card">
+
+            <div class="seller-form-heading">
+
+                <span>SELLER LOGIN</span>
+
+                <h3>
+                    Welcome, seller
+                </h3>
+
+                <p>
+                    Sign in to access your seller dashboard.
+                </p>
+
+            </div>
+
+
+            <form id="sellerLoginForm">
+
+
+                <!-- Email -->
+                <div class="seller-input-group">
+
+                    <label for="sellerEmail">
+                        Seller email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="sellerEmail"
+                        placeholder="seller@example.com"
+                    >
+
+                    <small
+                        id="sellerEmailError"
+                        class="seller-error">
+                    </small>
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="seller-input-group">
+
+                    <label for="sellerPassword">
+                        Password
+                    </label>
+
+                    <div class="seller-password-box">
+
+                        <input
+                            type="password"
+                            id="sellerPassword"
+                            placeholder="Enter your password"
+                        >
+
+                        <button
+                            type="button"
+                            id="sellerTogglePassword">
+                            Show
+                        </button>
+
+                    </div>
+
+                    <small
+                        id="sellerPasswordError"
+                        class="seller-error">
+                    </small>
+
+                </div>
+
+
+                <!-- Options -->
+                <div class="seller-options">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="sellerRemember">
+
+                        <span>Remember me</span>
+
+                    </label>
+
+
+                    <a
+                        href="#"
+                        onclick="sellerForgotPassword()">
+
+                        Forgot password?
+
+                    </a>
+
+                </div>
+
+
+                <!-- Login -->
+                <button
+                    type="submit"
+                    class="seller-login-button">
+
+                    Enter Seller Centre
+
+                    <span>→</span>
+
+                </button>
+
+
+                <!-- Demo Notice -->
+                <div class="seller-demo-note">
+
+                    <span>i</span>
+
+                    <p>
+                        This is currently a frontend demo.
+                        Real seller authentication will later
+                        be handled using Java, SQL and Tomcat.
+                    </p>
+
+                </div>
+
+
+                <!-- Back -->
+                <a
+                    href="index.html"
+                    class="seller-main-link">
+
+                    Return to main page
+
+                </a>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="seller-footer">
+
+        <strong>
+            ROGASREE MART
+        </strong>
+
+        <span>
+            Seller Centre · © 2026
+        </span>
+
+    </footer>
+
+
+    <script>
+
+        /*
+            Seller Password Show / Hide
+        */
+
+        const sellerPassword =
+            document.getElementById("sellerPassword");
+
+        const sellerToggle =
+            document.getElementById("sellerTogglePassword");
+
+
+        sellerToggle.addEventListener("click", function () {
+
+            if (sellerPassword.type === "password") {
+
+                sellerPassword.type = "text";
+
+                sellerToggle.textContent = "Hide";
+
+            } else {
+
+                sellerPassword.type = "password";
+
+                sellerToggle.textContent = "Show";
+
+            }
+
+        });
+
+
+        /*
+            Seller Login Validation
+        */
+
+        const sellerForm =
+            document.getElementById("sellerLoginForm");
+
+
+        sellerForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document.getElementById("sellerEmail")
+                .value
+                .trim();
+
+            const password =
+                document.getElementById("sellerPassword")
+                .value
+                .trim();
+
+
+            const emailError =
+                document.getElementById("sellerEmailError");
+
+            const passwordError =
+                document.getElementById("sellerPasswordError");
+
+
+            emailError.textContent = "";
+            passwordError.textContent = "";
+
+
+            let valid = true;
+
+
+            if (email === "") {
+
+                emailError.textContent =
+                    "Please enter your seller email.";
+
+                valid = false;
+
+            } else if (!email.includes("@")) {
+
+                emailError.textContent =
+                    "Please enter a valid email address.";
+
+                valid = false;
+
+            }
+
+
+            if (password === "") {
+
+                passwordError.textContent =
+                    "Please enter your password.";
+
+                valid = false;
+
+            } else if (password.length < 6) {
+
+                passwordError.textContent =
+                    "Password must contain at least 6 characters.";
+
+                valid = false;
+
+            }
+
+
+            /*
+                Frontend demo only.
+
+                No real authentication is happening here.
+            */
+
+            if (valid) {
+
+                alert(
+                    "Demo seller login successful! " +
+                    "Seller Dashboard will be connected later."
+                );
+
+                // Later:
+                // window.location.href =
+                // "seller-dashboard.html";
+
+            }
+
+        });
+
+
+        /*
+            Forgot Password
+        */
+
+        function sellerForgotPassword() {
+
+            alert(
+                "Seller password recovery will be added later."
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>My Cart | ROGASREE MART</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+</head>
+
+
+<body class="cart-page">
+
+    <!-- Header -->
+
+    <header class="cart-header">
+
+        <a
+            href="home.html"
+            class="cart-brand">
+
+            <div class="shop-logo">
+                R
+            </div>
+
+            <div>
+                <strong>ROGASREE MART</strong>
+
+                <small>
+                    Your shopping cart
+                </small>
+            </div>
+
+        </a>
+
+
+        <a
+            href="home.html"
+            class="continue-shopping">
+
+            ← Continue Shopping
+
+        </a>
+
+    </header>
+
+
+    <!-- Main -->
+
+    <main class="cart-container">
+
+        <div class="cart-title">
+
+            <span>YOUR SELECTION</span>
+
+            <h1>
+                Shopping Cart
+            </h1>
+
+            <p id="cartMessage">
+                Review the products you selected.
+            </p>
+
+        </div>
+
+
+        <section class="cart-layout">
+
+            <!-- Cart Items -->
+
+            <div
+                id="cartItems"
+                class="cart-items">
+
+            </div>
+
+
+            <!-- Summary -->
+
+            <aside class="cart-summary">
+
+                <h2>
+                    Order Summary
+                </h2>
+
+
+                <div class="summary-row">
+                    <p>Total Items: <span id="totalItems">0</span></p>
+                    <p>Subtotal: ₹<span id="subtotal">0</span></p>
+                    <p>Delivery: <span id="delivery">Free</span></p>
+
+<p>Grand Total: ₹<span id="grandTotal">0</span></p>
+<button type="button" onclick="placeOrder()">Checkout</button>
+
+                    <script>
+                    const productPrices = {
+                        "Wireless Headphones": 1899,
+                         "Warm Glow Desk Lamp": 1249,
+                         "Urban Canvas Tote": 799,
+                         "Daily Comfort Sneakers": 2199
+};
+function displayCart() {
+    let cart = JSON.parse(localStorage.getItem("rogasreeCart")) || [];
+
+    document.getElementById("totalItems").textContent =
+        cart.reduce((total, item) => total + item.quantity, 0);
+
+    let subtotal = 0;
+
+    cart.forEach(function(item) {
+        let price = productPrices[item.name] || 0;
+        subtotal += price * item.quantity;
+    });
+
+    document.getElementById("subtotal").textContent = subtotal;
+    document.getElementById("grandTotal").textContent = subtotal;
+
+    let cartItems = document.getElementById("cartItems");
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+    }
+
+    cartItems.innerHTML = "";
+
+    cart.forEach(function(item, index) {
+        cartItems.innerHTML += `
+            <div class="cart-item">
+                <h3>${item.name}</h3>
+                <p>Quantity: ${item.quantity}</p>
+                <button onclick="removeFromCart(${index})">
+                    Remove
+                </button>
+            </div>
+        `;
+    });
+}
+
+function removeFromCart(index) {
+    let cart = JSON.parse(localStorage.getItem("rogasreeCart")) || [];
+
+    cart.splice(index, 1);
+
+    localStorage.setItem("rogasreeCart", JSON.stringify(cart));
+
+    displayCart();
+}
+
+displayCart();
+function placeOrder() {
+    let cart = JSON.parse(localStorage.getItem("rogasreeCart")) || [];
+
+    if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+
+    localStorage.removeItem("rogasreeCart");
+
+    alert("Order placed successfully!");
+
+    window.location.href = "order.html";
+}
+
+    localStorage.removeItem("rogasreeCart");
+
+    displayCart();
+</script>
