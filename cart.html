@@ -3,174 +3,280 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Cart | ROGASREE MART</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
+<body>
 
-<body class="cart-page">
+    <h1>My Cart</h1>
 
-    <!-- Header -->
+    <div id="cartItems">
+        <p>Loading cart...</p>
+    </div>
 
-    <header class="cart-header">
+    <hr>
 
-        <a
-            href="home.html"
-            class="cart-brand">
+    <h2>Cart Summary</h2>
 
-            <div class="shop-logo">
-                R
-            </div>
+    <p>
+        Total Items:
+        <span id="totalItems">0</span>
+    </p>
 
-            <div>
-                <strong>ROGASREE MART</strong>
+    <p>
+        Subtotal:
+        ₹<span id="subtotal">0</span>
+    </p>
 
-                <small>
-                    Your shopping cart
-                </small>
-            </div>
+    <p>
+        Delivery:
+        ₹<span id="delivery">0</span>
+    </p>
 
-        </a>
+    <h3>
+        Grand Total:
+        ₹<span id="grandTotal">0</span>
+    </h3>
 
-
-        <a
-            href="home.html"
-            class="continue-shopping">
-
-            ← Continue Shopping
-
-        </a>
-
-    </header>
-
-
-    <!-- Main -->
-
-    <main class="cart-container">
-
-        <div class="cart-title">
-
-            <span>YOUR SELECTION</span>
-
-            <h1>
-                Shopping Cart
-            </h1>
-
-            <p id="cartMessage">
-                Review the products you selected.
-            </p>
-
-        </div>
+    <button type="button" onclick="placeOrder()">
+        Proceed to Checkout
+    </button>
 
 
-        <section class="cart-layout">
+    <script>
 
-            <!-- Cart Items -->
+        const userId =
+            localStorage.getItem("loggedInUserId");
 
-            <div
-                id="cartItems"
-                class="cart-items">
+        const cartItems =
+            document.getElementById("cartItems");
 
-            </div>
+        const totalItems =
+            document.getElementById("totalItems");
+
+        const subtotal =
+            document.getElementById("subtotal");
+
+        const delivery =
+            document.getElementById("delivery");
+
+        const grandTotal =
+            document.getElementById("grandTotal");
 
 
-            <!-- Summary -->
+        async function displayCart() {
 
-            <aside class="cart-summary">
+            if (!userId) {
 
-                <h2>
-                    Order Summary
-                </h2>
+                cartItems.innerHTML =
+                    "<p>Please login first.</p>";
+
+                return;
+            }
 
 
-                <div class="summary-row">
-                    <p>Total Items: <span id="totalItems">0</span></p>
-                    <p>Subtotal: ₹<span id="subtotal">0</span></p>
-                    <p>Delivery: <span id="delivery">Free</span></p>
+            try {
 
-<p>Grand Total: ₹<span id="grandTotal">0</span></p>
-<button type="button" onclick="placeOrder()">Checkout</button>
+                const cartResponse =
+                    await fetch(
+                        "http://localhost:8080/cart/" +
+                        userId
+                    );
 
-                    <script>
-                    const productPrices = {
-                        "Wireless Headphones": 1899,
-                         "Warm Glow Desk Lamp": 1249,
-                         "Urban Canvas Tote": 799,
-                         "Daily Comfort Sneakers": 2199
-};
-function displayCart() {
-    let cart = JSON.parse(localStorage.getItem("rogasreeCart")) || [];
 
-    document.getElementById("totalItems").textContent =
-        cart.reduce((total, item) => total + item.quantity, 0);
+                if (!cartResponse.ok) {
 
-    let subtotal = 0;
+                    throw new Error(
+                        "Unable to load cart"
+                    );
+                }
 
-    cart.forEach(function(item) {
-        let price = productPrices[item.name] || 0;
-        subtotal += price * item.quantity;
-    });
 
-    document.getElementById("subtotal").textContent = subtotal;
-    document.getElementById("grandTotal").textContent = subtotal;
+                const cart =
+                    await cartResponse.json();
 
-    let cartItems = document.getElementById("cartItems");
 
-    if (cart.length === 0) {
-        cartItems.innerHTML = "<p>Your cart is empty.</p>";
-        return;
-    }
+                const productResponse =
+                    await fetch(
+                        "http://localhost:8080/products"
+                    );
 
-    cartItems.innerHTML = "";
 
-    cart.forEach(function(item, index) {
-        cartItems.innerHTML += `
-            <div class="cart-item">
-                <h3>${item.name}</h3>
-                <p>Quantity: ${item.quantity}</p>
-                <button onclick="removeFromCart(${index})">
-                    Remove
-                </button>
-            </div>
-        `;
-    });
-}
+                if (!productResponse.ok) {
 
-function removeFromCart(index) {
-    let cart = JSON.parse(localStorage.getItem("rogasreeCart")) || [];
+                    throw new Error(
+                        "Unable to load products"
+                    );
+                }
 
-    cart.splice(index, 1);
 
-    localStorage.setItem("rogasreeCart", JSON.stringify(cart));
+                const products =
+                    await productResponse.json();
 
-    displayCart();
-}
 
-displayCart();
-function placeOrder() {
-    let cart = JSON.parse(localStorage.getItem("rogasreeCart")) || [];
+                cartItems.innerHTML = "";
 
-    if (cart.length === 0) {
-        alert("Your cart is empty.");
-        return;
-    }
 
-    localStorage.removeItem("rogasreeCart");
+                if (cart.length === 0) {
 
-    alert("Order placed successfully!");
+                    cartItems.innerHTML =
+                        "<p>Your cart is empty.</p>";
 
-    window.location.href = "order.html";
-}
+                    totalItems.textContent = "0";
+                    subtotal.textContent = "0";
+                    delivery.textContent = "0";
+                    grandTotal.textContent = "0";
 
-    localStorage.removeItem("rogasreeCart");
+                    return;
+                }
 
-    displayCart();
-</script>
+
+                let totalQuantity = 0;
+                let totalPrice = 0;
+
+
+                cart.forEach(function(item) {
+
+                    const product =
+                        products.find(function(product) {
+
+                            return product.id ===
+                                item.productId;
+
+                        });
+
+
+                    if (!product) {
+                        return;
+                    }
+
+
+                    const itemTotal =
+                        product.price *
+                        item.quantity;
+
+
+                    totalQuantity +=
+                        item.quantity;
+
+                    totalPrice +=
+                        itemTotal;
+
+
+                    const itemDiv =
+                        document.createElement("div");
+
+
+                    itemDiv.innerHTML =
+
+                        "<h3>" +
+                        product.name +
+                        "</h3>" +
+
+                        "<p>Price: ₹" +
+                        product.price +
+                        "</p>" +
+
+                        "<p>Quantity: " +
+                        item.quantity +
+                        "</p>" +
+
+                        "<p>Item Total: ₹" +
+                        itemTotal +
+                        "</p>" +
+
+                        "<button type='button' " +
+                        "onclick='removeFromCart(" +
+                        item.id +
+                        ")'>" +
+                        "Remove" +
+                        "</button>" +
+
+                        "<hr>";
+
+
+                    cartItems.appendChild(itemDiv);
+
+                });
+
+
+                totalItems.textContent =
+                    totalQuantity;
+
+                subtotal.textContent =
+                    totalPrice;
+
+                delivery.textContent =
+                    totalPrice > 0 ? 0 : 0;
+
+                grandTotal.textContent =
+                    totalPrice;
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                cartItems.innerHTML =
+                    "<p>Unable to load cart from server.</p>";
+            }
+        }
+
+
+        async function removeFromCart(cartId) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/cart/" +
+                        cartId,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to remove item"
+                    );
+                }
+
+
+                alert(
+                    "Item removed from cart!"
+                );
+
+
+                displayCart();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to remove item."
+                );
+            }
+        }
+
+
+        function placeOrder(){
+            window.location.href ="checkout.html";
+        }
+
+
+        displayCart();
+
+    </script>
+
+</body>
+
+</html>

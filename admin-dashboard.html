@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | ROGASREE MART</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>ROGASREE MART - Admin Dashboard</h1>
+
+    <!-- ADMIN INFORMATION -->
+
+    <h2>Admin Information</h2>
+
+    <p>
+        Admin Name:
+        <span id="adminName">Loading...</span>
+    </p>
+
+    <p>
+        Admin Email:
+        <span id="adminEmail">Loading...</span>
+    </p>
+
+    <hr>
+
+
+    <!-- REGISTERED USERS -->
+
+    <h2>Registered Users</h2>
+
+    <div id="users">
+        <p>Loading users...</p>
+    </div>
+
+    <hr>
+
+
+    <!-- PRODUCTS -->
+
+    <h2>Products</h2>
+
+    <div id="products">
+        <p>Loading products...</p>
+    </div>
+
+    <hr>
+
+
+    <!-- ORDERS -->
+
+    <h2>Customer Orders</h2>
+
+    <div id="orders">
+        <p>Loading orders...</p>
+    </div>
+
+
+    <script>
+
+        const adminId =
+            localStorage.getItem("adminId");
+
+        const adminName =
+            localStorage.getItem("adminName");
+
+        const adminEmail =
+            localStorage.getItem("adminEmail");
+
+
+        document.getElementById("adminName").textContent =
+            adminName || "Admin";
+
+        document.getElementById("adminEmail").textContent =
+            adminEmail || "Not available";
+
+
+        // LOAD USERS
+
+        async function loadUsers() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/users"
+                    );
+
+                if (!response.ok) {
+                    throw new Error("Unable to load users");
+                }
+
+                const users =
+                    await response.json();
+
+                const usersDiv =
+                    document.getElementById("users");
+
+                usersDiv.innerHTML = "";
+
+
+                if (users.length === 0) {
+
+                    usersDiv.innerHTML =
+                        "<p>No registered users found.</p>";
+
+                    return;
+                }
+
+
+                users.forEach(function(user) {
+
+                    const userDiv =
+                        document.createElement("div");
+
+                    userDiv.innerHTML =
+
+                        "<h3>User ID: " +
+                        user.id +
+                        "</h3>" +
+
+                        "<p>Name: " +
+                        user.name +
+                        "</p>" +
+
+                        "<p>Email: " +
+                        user.email +
+                        "</p>" +
+
+                        "<hr>";
+
+                    usersDiv.appendChild(userDiv);
+
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("users").innerHTML =
+                    "<p>Unable to load users from server.</p>";
+            }
+        }
+
+
+        // LOAD PRODUCTS
+
+        async function loadProducts() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/products"
+                    );
+
+                if (!response.ok) {
+                    throw new Error("Unable to load products");
+                }
+
+                const products =
+                    await response.json();
+
+                const productsDiv =
+                    document.getElementById("products");
+
+                productsDiv.innerHTML = "";
+
+
+                if (products.length === 0) {
+
+                    productsDiv.innerHTML =
+                        "<p>No products found.</p>";
+
+                    return;
+                }
+
+
+                products.forEach(function(product) {
+
+                    const productDiv =
+                        document.createElement("div");
+
+                    productDiv.innerHTML =
+
+                        "<h3>" +
+                        product.name +
+                        "</h3>" +
+
+                        "<p>Product ID: " +
+                        product.id +
+                        "</p>" +
+
+                        "<p>Price: ₹" +
+                        product.price +
+                        "</p>" +
+
+                        "<p>Description: " +
+                        (product.description || "No description") +
+                        "</p>" +
+
+                        "<hr>";
+
+                    productsDiv.appendChild(productDiv);
+
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("products").innerHTML =
+                    "<p>Unable to load products from server.</p>";
+            }
+        }
+
+
+        // LOAD ORDERS
+
+        async function loadOrders() {
+
+            try {
+
+                const usersResponse =
+                    await fetch(
+                        "http://localhost:8080/users"
+                    );
+
+                if (!usersResponse.ok) {
+                    throw new Error("Unable to load users");
+                }
+
+                const users =
+                    await usersResponse.json();
+
+
+                const ordersDiv =
+                    document.getElementById("orders");
+
+                ordersDiv.innerHTML = "";
+
+
+                let allOrders = [];
+
+
+                for (const user of users) {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:8080/orders/" +
+                            user.id
+                        );
+
+
+                    if (!response.ok) {
+                        continue;
+                    }
+
+
+                    const userOrders =
+                        await response.json();
+
+
+                    userOrders.forEach(function(order) {
+
+                        allOrders.push({
+                            order: order,
+                            user: user
+                        });
+
+                    });
+
+                }
+
+
+                if (allOrders.length === 0) {
+
+                    ordersDiv.innerHTML =
+                        "<p>No customer orders found.</p>";
+
+                    return;
+                }
+
+
+                allOrders.forEach(function(data) {
+
+                    const order =
+                        data.order;
+
+                    const user =
+                        data.user;
+
+
+                    const orderDiv =
+                        document.createElement("div");
+
+
+                    orderDiv.innerHTML =
+
+                        "<h3>Order #" +
+                        order.id +
+                        "</h3>" +
+
+                        "<p>Customer: " +
+                        user.name +
+                        "</p>" +
+
+                        "<p>Email: " +
+                        user.email +
+                        "</p>" +
+
+                        "<p>User ID: " +
+                        order.userId +
+                        "</p>" +
+
+                        "<p>Total Amount: ₹" +
+                        order.totalAmount +
+                        "</p>" +
+
+                        "<p>Status: " +
+                        order.status +
+                        "</p>" +
+
+                        "<hr>";
+
+
+                    ordersDiv.appendChild(orderDiv);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("orders").innerHTML =
+                    "<p>Unable to load orders from server.</p>";
+            }
+        }
+
+
+        // CHECK ADMIN LOGIN
+
+        if (!adminId) {
+
+            document.body.innerHTML =
+                "<h2>Please login as admin first.</h2>";
+
+        } else {
+
+            loadUsers();
+
+            loadProducts();
+
+            loadOrders();
+
+        }
+
+    </script>
+
+</body>
+
+</html>

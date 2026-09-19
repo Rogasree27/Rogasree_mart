@@ -12,7 +12,6 @@
 
 <body class="seller-login-page">
 
-    <!-- Header -->
     <header class="seller-header">
 
         <a href="index.html" class="seller-brand">
@@ -28,7 +27,6 @@
 
         </a>
 
-
         <a href="index.html" class="seller-back">
             ← Back to roles
         </a>
@@ -36,10 +34,8 @@
     </header>
 
 
-    <!-- Main -->
     <main class="seller-container">
 
-        <!-- Seller Information -->
         <section class="seller-intro">
 
             <div class="seller-badge">
@@ -57,48 +53,44 @@
                 business further.
             </p>
 
-
             <div class="seller-points">
 
                 <div class="seller-point">
-
                     <span>01</span>
 
                     <div>
                         <strong>Manage products</strong>
+
                         <small>
                             Add and organize your products easily.
                         </small>
                     </div>
-
                 </div>
 
 
                 <div class="seller-point">
-
                     <span>02</span>
 
                     <div>
                         <strong>Track orders</strong>
+
                         <small>
                             Keep an eye on incoming customer orders.
                         </small>
                     </div>
-
                 </div>
 
 
                 <div class="seller-point">
-
                     <span>03</span>
 
                     <div>
                         <strong>Watch your growth</strong>
+
                         <small>
                             View sales and revenue information.
                         </small>
                     </div>
-
                 </div>
 
             </div>
@@ -106,7 +98,6 @@
         </section>
 
 
-        <!-- Seller Login Card -->
         <section class="seller-login-card">
 
             <div class="seller-form-heading">
@@ -124,10 +115,10 @@
             </div>
 
 
+            <!-- SELLER LOGIN FORM -->
+
             <form id="sellerLoginForm">
 
-
-                <!-- Email -->
                 <div class="seller-input-group">
 
                     <label for="sellerEmail">
@@ -148,7 +139,6 @@
                 </div>
 
 
-                <!-- Password -->
                 <div class="seller-input-group">
 
                     <label for="sellerPassword">
@@ -179,7 +169,6 @@
                 </div>
 
 
-                <!-- Options -->
                 <div class="seller-options">
 
                     <label>
@@ -195,7 +184,7 @@
 
                     <a
                         href="#"
-                        onclick="sellerForgotPassword()">
+                        onclick="showSellerForgotPassword(); return false;">
 
                         Forgot password?
 
@@ -204,7 +193,6 @@
                 </div>
 
 
-                <!-- Login -->
                 <button
                     type="submit"
                     class="seller-login-button">
@@ -216,21 +204,18 @@
                 </button>
 
 
-                <!-- Demo Notice -->
                 <div class="seller-demo-note">
 
                     <span>i</span>
 
                     <p>
-                        This is currently a frontend demo.
-                        Real seller authentication will later
-                        be handled using Java, SQL and Tomcat.
+                        Seller authentication is connected
+                        to Java, MySQL and Spring Boot.
                     </p>
 
                 </div>
 
 
-                <!-- Back -->
                 <a
                     href="index.html"
                     class="seller-main-link">
@@ -241,12 +226,95 @@
 
             </form>
 
+
+            <!-- SELLER FORGOT PASSWORD -->
+
+            <div
+                id="sellerForgotPasswordSection"
+                style="display: none; margin-top: 25px;">
+
+                <hr>
+
+                <div class="seller-form-heading">
+
+                    <span>PASSWORD RECOVERY</span>
+
+                    <h3>
+                        Reset password
+                    </h3>
+
+                    <p>
+                        Enter your seller email and create a new password.
+                    </p>
+
+                </div>
+
+
+                <div class="seller-input-group">
+
+                    <label for="sellerForgotEmail">
+                        Seller email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="sellerForgotEmail"
+                        placeholder="seller@example.com"
+                    >
+
+                </div>
+
+
+                <div class="seller-input-group">
+
+                    <label for="sellerNewPassword">
+                        New Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="sellerNewPassword"
+                        placeholder="Enter new password"
+                    >
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="sellerResetPasswordButton"
+                    class="seller-login-button"
+                    onclick="resetSellerPassword()">
+
+                    Reset Password
+
+                    <span>→</span>
+
+                </button>
+
+
+                <p id="sellerForgotMessage"></p>
+
+
+                <p style="margin-top: 15px;">
+
+                    <a
+                        href="#"
+                        onclick="hideSellerForgotPassword(); return false;">
+
+                        ← Back to Seller Login
+
+                    </a>
+
+                </p>
+
+            </div>
+
         </section>
 
     </main>
 
 
-    <!-- Footer -->
     <footer class="seller-footer">
 
         <strong>
@@ -262,9 +330,9 @@
 
     <script>
 
-        /*
-            Seller Password Show / Hide
-        */
+        /* =========================
+           SHOW / HIDE PASSWORD
+        ========================= */
 
         const sellerPassword =
             document.getElementById("sellerPassword");
@@ -292,109 +360,355 @@
         });
 
 
-        /*
-            Seller Login Validation
-        */
+        /* =========================
+           SELLER LOGIN
+        ========================= */
 
         const sellerForm =
             document.getElementById("sellerLoginForm");
 
 
-        sellerForm.addEventListener("submit", function (event) {
+        sellerForm.addEventListener(
+            "submit",
+            async function (event) {
 
-            event.preventDefault();
+                event.preventDefault();
 
+
+                const email =
+                    document.getElementById("sellerEmail")
+                    .value
+                    .trim();
+
+
+                const password =
+                    document.getElementById("sellerPassword")
+                    .value
+                    .trim();
+
+
+                const emailError =
+                    document.getElementById(
+                        "sellerEmailError"
+                    );
+
+
+                const passwordError =
+                    document.getElementById(
+                        "sellerPasswordError"
+                    );
+
+
+                emailError.textContent = "";
+
+                passwordError.textContent = "";
+
+
+                if (email === "") {
+
+                    emailError.textContent =
+                        "Please enter your seller email.";
+
+                    return;
+                }
+
+
+                if (!email.includes("@")) {
+
+                    emailError.textContent =
+                        "Please enter a valid email address.";
+
+                    return;
+                }
+
+
+                if (password === "") {
+
+                    passwordError.textContent =
+                        "Please enter your password.";
+
+                    return;
+                }
+
+
+                if (password.length < 6) {
+
+                    passwordError.textContent =
+                        "Password must contain at least 6 characters.";
+
+                    return;
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:8080/seller/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    email: email,
+
+                                    password: password
+
+                                })
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Seller login failed"
+                        );
+
+                    }
+
+
+                    const seller =
+                        await response.json();
+
+
+                    if (!seller || !seller.id) {
+
+                        passwordError.textContent =
+                            "Invalid seller email or password.";
+
+                        return;
+                    }
+
+
+                    localStorage.setItem(
+                        "sellerId",
+                        seller.id
+                    );
+
+
+                    localStorage.setItem(
+                        "sellerName",
+                        seller.name
+                    );
+
+
+                    localStorage.setItem(
+                        "sellerEmail",
+                        seller.email
+                    );
+
+
+                    alert(
+                        "Seller login successful!"
+                    );
+
+
+                    window.location.href =
+                        "seller-dashboard.html";
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Backend connection failed. " +
+                        "Please start Spring Boot."
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================
+           SHOW FORGOT PASSWORD
+        ========================= */
+
+        function showSellerForgotPassword() {
+
+            document
+                .getElementById(
+                    "sellerForgotPasswordSection"
+                )
+                .style.display = "block";
+
+        }
+
+
+        /* =========================
+           HIDE FORGOT PASSWORD
+        ========================= */
+
+        function hideSellerForgotPassword() {
+
+            document
+                .getElementById(
+                    "sellerForgotPasswordSection"
+                )
+                .style.display = "none";
+
+        }
+
+
+        /* =========================
+           SELLER RESET PASSWORD
+        ========================= */
+
+        async function resetSellerPassword() {
 
             const email =
-                document.getElementById("sellerEmail")
-                .value
-                .trim();
-
-            const password =
-                document.getElementById("sellerPassword")
-                .value
-                .trim();
+                document
+                    .getElementById(
+                        "sellerForgotEmail"
+                    )
+                    .value
+                    .trim();
 
 
-            const emailError =
-                document.getElementById("sellerEmailError");
-
-            const passwordError =
-                document.getElementById("sellerPasswordError");
-
-
-            emailError.textContent = "";
-            passwordError.textContent = "";
+            const newPassword =
+                document
+                    .getElementById(
+                        "sellerNewPassword"
+                    )
+                    .value;
 
 
-            let valid = true;
-
-
-            if (email === "") {
-
-                emailError.textContent =
-                    "Please enter your seller email.";
-
-                valid = false;
-
-            } else if (!email.includes("@")) {
-
-                emailError.textContent =
-                    "Please enter a valid email address.";
-
-                valid = false;
-
-            }
-
-
-            if (password === "") {
-
-                passwordError.textContent =
-                    "Please enter your password.";
-
-                valid = false;
-
-            } else if (password.length < 6) {
-
-                passwordError.textContent =
-                    "Password must contain at least 6 characters.";
-
-                valid = false;
-
-            }
-
-
-            /*
-                Frontend demo only.
-
-                No real authentication is happening here.
-            */
-
-            if (valid) {
-
-                alert(
-                    "Demo seller login successful! " +
-                    "Seller Dashboard will be connected later."
+            const resetButton =
+                document.getElementById(
+                    "sellerResetPasswordButton"
                 );
 
-                // Later:
-                // window.location.href =
-                // "seller-dashboard.html";
+
+            const message =
+                document.getElementById(
+                    "sellerForgotMessage"
+                );
+
+
+            if (!email || !newPassword) {
+
+                message.textContent =
+                    "Please enter email and new password.";
+
+                message.style.color =
+                    "red";
+
+                return;
 
             }
 
-        });
+
+            if (newPassword.length < 6) {
+
+                message.textContent =
+                    "Password must contain at least 6 characters.";
+
+                message.style.color =
+                    "red";
+
+                return;
+
+            }
 
 
-        /*
-            Forgot Password
-        */
+            resetButton.disabled = true;
 
-        function sellerForgotPassword() {
+            resetButton.innerHTML =
+                "Updating...";
 
-            alert(
-                "Seller password recovery will be added later."
-            );
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/seller/forgot-password",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                email: email,
+
+                                newPassword: newPassword
+
+                            })
+                        }
+                    );
+
+
+                const result =
+                    await response.text();
+
+
+                if (
+                    result ===
+                    "Password updated successfully"
+                ) {
+
+                    message.textContent =
+                        "Password updated successfully!";
+
+                    message.style.color =
+                        "green";
+
+
+                    document
+                        .getElementById(
+                            "sellerForgotEmail"
+                        )
+                        .value = "";
+
+
+                    document
+                        .getElementById(
+                            "sellerNewPassword"
+                        )
+                        .value = "";
+
+
+                } else {
+
+                    message.textContent =
+                        result;
+
+                    message.style.color =
+                        "red";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                message.textContent =
+                    "Backend connection failed. Please start Spring Boot.";
+
+                message.style.color =
+                    "red";
+
+            } finally {
+
+                resetButton.disabled = false;
+
+                resetButton.innerHTML =
+                    "Reset Password <span>→</span>";
+
+            }
 
         }
 

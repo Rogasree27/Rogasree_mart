@@ -2,416 +2,565 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Buyer Login | ROGASREE MART</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+    <title>Login | ROGASREE MART</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
 </head>
 
-<body class="login-page">
 
-    <!-- Top Brand Area -->
-    <header class="login-header">
+<body>
 
-        <a href="index.html" class="back-brand">
-            <div class="brand-mark">R</div>
+    <div class="login-container">
 
-            <div>
-                <h1>ROGASREE MART</h1>
-                <p>Discover. Choose. Enjoy.</p>
-            </div>
-        </a>
+        <div class="login-box">
 
-        <a href="index.html" class="back-link">
-            ← Back to roles
-        </a>
+            <h1>ROGASREE MART</h1>
 
-    </header>
+            <p>Login to your account</p>
 
 
-    <!-- Login Area -->
-    <main class="login-container">
+            <!-- LOGIN FORM -->
 
-        <!-- Left Information -->
-        <section class="login-intro">
+            <form id="loginForm">
 
-            <span class="login-label">
-                BUYER ACCESS
-            </span>
+                <div class="form-group">
 
-            <h2>
-                Welcome back,
-                <span>shopper.</span>
-            </h2>
-
-            <p>
-                Sign in to discover products, manage your
-                wishlist, track your orders, and enjoy your
-                shopping journey with ROGASREE MART.
-            </p>
-
-            <div class="login-highlight">
-                <span>✦</span>
-
-                <div>
-                    <strong>One account. Endless choices.</strong>
-                    <small>Everything you love, just a sign-in away.</small>
-                </div>
-            </div>
-
-        </section>
-
-
-        <!-- Login Form -->
-        <section class="login-card">
-
-            <div class="form-heading">
-
-                <span>BUYER LOGIN</span>
-
-                <h3>Sign in to continue</h3>
-
-                <p>
-                    Enter your registered account details below.
-                </p>
-
-            </div>
-
-
-            <form id="buyerLoginForm">
-
-                <!-- Email -->
-                <div class="input-group">
-
-                    <label for="buyerEmail">
+                    <label for="email">
                         Email
                     </label>
 
                     <input
                         type="email"
-                        id="buyerEmail"
-                        placeholder="Enter your registered email"
-                        required
-                    >
-
-                    <small
-                        class="error-message"
-                        id="emailError">
-                    </small>
+                        id="email"
+                        placeholder="Enter your email"
+                        required>
 
                 </div>
 
 
-                <!-- Password -->
-                <div class="input-group">
+                <div class="form-group">
 
-                    <label for="buyerPassword">
+                    <label for="password">
                         Password
                     </label>
 
-                    <div class="password-box">
-
-                        <input
-                            type="password"
-                            id="buyerPassword"
-                            placeholder="Enter your password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            id="togglePassword">
-                            Show
-                        </button>
-
-                    </div>
-
-                    <small
-                        class="error-message"
-                        id="passwordError">
-                    </small>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required>
 
                 </div>
 
 
-                <!-- Remember / Forgot -->
-                <div class="login-options">
+                <!-- FORGOT PASSWORD -->
 
-                    <label class="remember-option">
+                <p style="text-align: right; margin-top: -5px;">
 
-                        <input
-                            type="checkbox"
-                            id="rememberMe">
+                    <a
+                        href="#"
+                        onclick="showForgotPassword(); return false;">
 
-                        <span>Remember me</span>
+                        Forgot Password?
 
-                    </label>
-
-                    <a href="#" onclick="showForgotMessage(); return false;">
-                        Forgot password?
-                    </a>
-
-                </div>
-
-
-                <!-- Login Button -->
-                <button
-                    type="submit"
-                    class="login-button">
-
-                    Login as Buyer
-
-                    <span>→</span>
-
-                </button>
-
-
-                <div class="divider">
-                    <span>or continue with</span>
-                </div>
-
-
-                <!-- Social Login -->
-                <div class="social-buttons">
-
-                    <button
-                        type="button"
-                        class="social-button"
-                        onclick="showDemoMessage('Google')">
-
-                        <strong>G</strong>
-                        Google
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="social-button"
-                        onclick="showDemoMessage('Apple')">
-
-                        <strong>●</strong>
-                        Apple
-
-                    </button>
-
-                </div>
-
-
-                <!-- Signup -->
-                <p class="signup-text">
-
-                    New to ROGASREE MART?
-
-                    <a href="register.html">
-                        Create an account
                     </a>
 
                 </p>
 
+
+                <button
+                    type="submit"
+                    id="loginButton">
+
+                    Login
+
+                </button>
+
             </form>
 
-        </section>
 
-    </main>
+            <!-- LOGIN MESSAGE -->
+
+            <p
+                id="loginMessage"
+                style="
+                    display: none;
+                    margin-top: 15px;
+                    font-weight: bold;
+                ">
+            </p>
 
 
-    <!-- Footer -->
-    <footer class="login-footer">
+            <p>
 
-        <span>
-            © 2026 ROGASREE MART
-        </span>
+                Don't have an account?
 
-        <span>
-            Create an account first, then login with your
-            registered email and password.
-        </span>
+                <a href="register.html">
+                    Register
+                </a>
 
-    </footer>
+            </p>
+
+
+            <!-- FORGOT PASSWORD SECTION -->
+
+            <div
+                id="forgotPasswordSection"
+                style="display: none; margin-top: 20px;">
+
+                <hr>
+
+                <h3>Reset Password</h3>
+
+                <p>
+                    Enter your registered email and new password.
+                </p>
+
+
+                <div class="form-group">
+
+                    <label for="forgotEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="forgotEmail"
+                        placeholder="Enter your registered email">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="newPassword">
+                        New Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="newPassword"
+                        placeholder="Enter new password">
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="resetPasswordButton"
+                    onclick="resetPassword()">
+
+                    Reset Password
+
+                </button>
+
+
+                <p
+                    id="forgotMessage"
+                    style="font-weight: bold;">
+                </p>
+
+
+                <p>
+
+                    <a
+                        href="#"
+                        onclick="hideForgotPassword(); return false;">
+
+                        Back to Login
+
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
 
 
     <script>
 
-        /* ================================
-           SHOW / HIDE PASSWORD
-        ================================= */
 
-        const passwordInput =
-            document.getElementById("buyerPassword");
-
-        const togglePassword =
-            document.getElementById("togglePassword");
-
-
-        togglePassword.addEventListener("click", function () {
-
-            if (passwordInput.type === "password") {
-
-                passwordInput.type = "text";
-                togglePassword.textContent = "Hide";
-
-            } else {
-
-                passwordInput.type = "password";
-                togglePassword.textContent = "Show";
-
-            }
-
-        });
-
-
-        /* ================================
+        /* =========================
            LOGIN
-        ================================= */
+        ========================= */
 
-        const loginForm =
-            document.getElementById("buyerLoginForm");
+        document
+            .getElementById("loginForm")
+            .addEventListener(
+                "submit",
+                async function(event) {
 
-
-        loginForm.addEventListener("submit", function (event) {
-
-            event.preventDefault();
-
-
-            const email =
-                document.getElementById("buyerEmail").value.trim();
-
-            const password =
-                document.getElementById("buyerPassword").value;
+                    event.preventDefault();
 
 
-            const emailError =
-                document.getElementById("emailError");
-
-            const passwordError =
-                document.getElementById("passwordError");
-
-
-            emailError.textContent = "";
-            passwordError.textContent = "";
+                    const email =
+                        document
+                            .getElementById("email")
+                            .value
+                            .trim();
 
 
-            let isValid = true;
+                    const password =
+                        document
+                            .getElementById("password")
+                            .value;
 
 
-            /* Email validation */
-
-            if (email === "") {
-
-                emailError.textContent =
-                    "Please enter your registered email.";
-
-                isValid = false;
-
-            }
+                    const loginButton =
+                        document.getElementById(
+                            "loginButton"
+                        );
 
 
-            /* Password validation */
-
-            if (password === "") {
-
-                passwordError.textContent =
-                    "Please enter your password.";
-
-                isValid = false;
-
-            }
+                    const loginMessage =
+                        document.getElementById(
+                            "loginMessage"
+                        );
 
 
-            if (!isValid) {
-                return;
-            }
+                    loginMessage.textContent = "";
+
+                    loginMessage.style.display =
+                        "none";
 
 
-            /* ================================
-               CHECK REGISTERED ACCOUNT
-            ================================= */
+                    loginButton.disabled = true;
 
-            const registeredEmail =
-                localStorage.getItem("registeredEmail");
-
-            const registeredPassword =
-                localStorage.getItem("registeredPassword");
+                    loginButton.textContent =
+                        "Logging in...";
 
 
-            /* No registration found */
+                    try {
 
-            if (!registeredEmail || !registeredPassword) {
+                        const response =
+                            await fetch(
+                                "http://localhost:8080/login",
+                                {
+                                    method: "POST",
 
-                alert(
-                    "No account found. Please create an account first."
-                );
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
 
-                window.location.href = "register.html";
+                                    body: JSON.stringify({
 
-                return;
-            }
+                                        email: email,
 
+                                        password: password
 
-            /* Check email and password */
-
-            if (
-                email === registeredEmail &&
-                password === registeredPassword
-            ) {
-
-                /* Save login status */
-
-                localStorage.setItem(
-                    "isLoggedIn",
-                    "true"
-                );
-
-                localStorage.setItem(
-                    "loggedInEmail",
-                    email
-                );
+                                    })
+                                }
+                            );
 
 
-                alert("Login successful!");
+                        /*
+                         * IMPORTANT:
+                         *
+                         * Backend response received.
+                         * So don't immediately treat
+                         * response.ok as connection failure.
+                         */
 
 
-                /* Go to Home */
-
-                window.location.href = "home.html";
-
-            } else {
-
-                alert(
-                    "Invalid email or password. Please use your registered details."
-                );
-
-            }
-
-        });
+                        let user = null;
 
 
-        /* ================================
-           FORGOT PASSWORD
-        ================================= */
+                        try {
 
-        function showForgotMessage() {
+                            user =
+                                await response.json();
 
-            alert(
-                "Please use your registered email. Password recovery will be added later."
+                        } catch (jsonError) {
+
+                            user = null;
+
+                        }
+
+
+                        /*
+                         * WRONG EMAIL / PASSWORD
+                         */
+
+                        if (
+                            !user ||
+                            !user.id
+                        ) {
+
+                            loginMessage.textContent =
+                                "Invalid email or password.";
+
+                            loginMessage.style.color =
+                                "red";
+
+                            loginMessage.style.display =
+                                "block";
+
+                            return;
+                        }
+
+
+                        /*
+                         * CORRECT LOGIN
+                         */
+
+                        localStorage.setItem(
+                            "loggedInUserId",
+                            user.id
+                        );
+
+
+                        localStorage.setItem(
+                            "loggedInUserName",
+                            user.name
+                        );
+
+
+                        localStorage.setItem(
+                            "loggedInUserEmail",
+                            user.email
+                        );
+
+
+                        loginMessage.textContent =
+                            "Login successful!";
+
+                        loginMessage.style.color =
+                            "green";
+
+                        loginMessage.style.display =
+                            "block";
+
+
+                        setTimeout(function() {
+
+                            window.location.href =
+                                "home.html";
+
+                        }, 500);
+
+
+                    } catch (error) {
+
+                        /*
+                         * This happens only when
+                         * Spring Boot cannot be reached.
+                         */
+
+                        console.error(
+                            "Backend connection error:",
+                            error
+                        );
+
+
+                        loginMessage.textContent =
+                            "Backend connection failed. Please start Spring Boot.";
+
+                        loginMessage.style.color =
+                            "red";
+
+                        loginMessage.style.display =
+                            "block";
+
+                    } finally {
+
+                        loginButton.disabled =
+                            false;
+
+                        loginButton.textContent =
+                            "Login";
+
+                    }
+
+                }
             );
+
+
+        /* =========================
+           SHOW FORGOT PASSWORD
+        ========================= */
+
+        function showForgotPassword() {
+
+            document
+                .getElementById(
+                    "forgotPasswordSection"
+                )
+                .style.display = "block";
 
         }
 
 
-        /* ================================
-           GOOGLE / APPLE DEMO
-        ================================= */
+        /* =========================
+           HIDE FORGOT PASSWORD
+        ========================= */
 
-        function showDemoMessage(provider) {
+        function hideForgotPassword() {
 
-            alert(
-                provider +
-                " login is currently not available."
-            );
+            document
+                .getElementById(
+                    "forgotPasswordSection"
+                )
+                .style.display = "none";
+
+        }
+
+
+        /* =========================
+           RESET PASSWORD
+        ========================= */
+
+        async function resetPassword() {
+
+            const email =
+                document
+                    .getElementById(
+                        "forgotEmail"
+                    )
+                    .value
+                    .trim();
+
+
+            const newPassword =
+                document
+                    .getElementById(
+                        "newPassword"
+                    )
+                    .value;
+
+
+            const resetButton =
+                document.getElementById(
+                    "resetPasswordButton"
+                );
+
+
+            const forgotMessage =
+                document.getElementById(
+                    "forgotMessage"
+                );
+
+
+            if (
+                !email ||
+                !newPassword
+            ) {
+
+                forgotMessage.textContent =
+                    "Please enter email and new password.";
+
+                forgotMessage.style.color =
+                    "red";
+
+                return;
+
+            }
+
+
+            resetButton.disabled = true;
+
+            resetButton.textContent =
+                "Updating...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/forgot-password",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                email: email,
+
+                                newPassword:
+                                    newPassword
+
+                            })
+                        }
+                    );
+
+
+                const result =
+                    await response.text();
+
+
+                if (
+                    result ===
+                    "Password updated successfully"
+                ) {
+
+                    forgotMessage.textContent =
+                        "Password updated successfully!";
+
+                    forgotMessage.style.color =
+                        "green";
+
+
+                    document
+                        .getElementById(
+                            "forgotEmail"
+                        )
+                        .value = "";
+
+
+                    document
+                        .getElementById(
+                            "newPassword"
+                        )
+                        .value = "";
+
+                } else {
+
+                    forgotMessage.textContent =
+                        result;
+
+                    forgotMessage.style.color =
+                        "red";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                forgotMessage.textContent =
+                    "Backend connection failed. Please start Spring Boot.";
+
+                forgotMessage.style.color =
+                    "red";
+
+            } finally {
+
+                resetButton.disabled =
+                    false;
+
+                resetButton.textContent =
+                    "Reset Password";
+
+            }
 
         }
 

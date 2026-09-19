@@ -10,365 +10,458 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="admin-login-page">
+<body>
 
-    <!-- Header -->
-    <header class="admin-header">
+    <div class="login-container">
 
-        <a href="index.html" class="admin-brand">
+        <div class="login-box">
 
-            <div class="admin-mark">
-                R
-            </div>
+            <h1>ROGASREE MART</h1>
 
-            <div>
-                <h1>ROGASREE MART</h1>
-                <p>Marketplace Administration</p>
-            </div>
+            <h2>Admin Login</h2>
 
-        </a>
+            <p>Login to Admin Dashboard</p>
 
-
-        <a href="index.html" class="admin-back">
-            ← Back to roles
-        </a>
-
-    </header>
-
-
-    <!-- Main -->
-    <main class="admin-login-container">
-
-        <!-- Admin Introduction -->
-        <section class="admin-intro">
-
-            <div class="admin-badge">
-                ADMINISTRATOR ACCESS
-            </div>
-
-            <h2>
-                Keep the marketplace
-                <span>running smoothly.</span>
-            </h2>
-
-            <p>
-                Access the administration area to monitor users,
-                sellers, products, orders, revenue, and marketplace
-                activity.
-            </p>
-
-
-            <div class="admin-security-box">
-
-                <div class="security-icon">
-                    ✓
-                </div>
-
-                <div>
-                    <strong>Restricted workspace</strong>
-
-                    <small>
-                        This area is intended for authorized
-                        marketplace administrators.
-                    </small>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- Admin Login Card -->
-        <section class="admin-login-card">
-
-            <div class="admin-form-heading">
-
-                <span>ADMIN LOGIN</span>
-
-                <h3>
-                    Secure sign in
-                </h3>
-
-                <p>
-                    Enter your administrator credentials.
-                </p>
-
-            </div>
-
+            <!-- ADMIN LOGIN -->
 
             <form id="adminLoginForm">
 
+                <div class="form-group">
 
-                <!-- Email -->
-                <div class="admin-input-group">
-
-                    <label for="adminEmail">
-                        Administrator email
+                    <label for="email">
+                        Email
                     </label>
 
                     <input
                         type="email"
-                        id="adminEmail"
-                        placeholder="admin@example.com"
-                    >
-
-                    <small
-                        id="adminEmailError"
-                        class="admin-error">
-                    </small>
+                        id="email"
+                        placeholder="Enter admin email"
+                        required>
 
                 </div>
 
 
-                <!-- Password -->
-                <div class="admin-input-group">
+                <div class="form-group">
 
-                    <label for="adminPassword">
+                    <label for="password">
                         Password
                     </label>
 
-                    <div class="admin-password-box">
-
-                        <input
-                            type="password"
-                            id="adminPassword"
-                            placeholder="Enter your password"
-                        >
-
-                        <button
-                            type="button"
-                            id="adminTogglePassword">
-                            Show
-                        </button>
-
-                    </div>
-
-                    <small
-                        id="adminPasswordError"
-                        class="admin-error">
-                    </small>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter admin password"
+                        required>
 
                 </div>
 
 
-                <!-- Options -->
-                <div class="admin-options">
+                <!-- FORGOT PASSWORD -->
 
-                    <label>
-
-                        <input
-                            type="checkbox"
-                            id="adminRemember">
-
-                        <span>Remember me</span>
-
-                    </label>
-
+                <p style="text-align: right; margin-top: -5px;">
 
                     <a
                         href="#"
-                        onclick="adminForgotPassword()">
+                        onclick="showForgotPassword(); return false;">
 
-                        Forgot password?
+                        Forgot Password?
 
                     </a>
+
+                </p>
+
+
+                <button
+                    type="submit"
+                    id="adminLoginButton">
+
+                    Admin Login
+
+                </button>
+
+            </form>
+
+
+            <p id="adminMessage"></p>
+
+
+            <!-- FORGOT PASSWORD SECTION -->
+
+            <div
+                id="forgotPasswordSection"
+                style="display: none; margin-top: 20px;">
+
+                <hr>
+
+                <h3>Reset Admin Password</h3>
+
+                <p>
+                    Enter your admin email and new password.
+                </p>
+
+
+                <div class="form-group">
+
+                    <label for="forgotEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="forgotEmail"
+                        placeholder="Enter admin email">
 
                 </div>
 
 
-                <!-- Login Button -->
+                <div class="form-group">
+
+                    <label for="newPassword">
+                        New Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="newPassword"
+                        placeholder="Enter new password">
+
+                </div>
+
+
                 <button
-                    type="submit"
-                    class="admin-login-button">
+                    type="button"
+                    id="resetPasswordButton"
+                    onclick="resetAdminPassword()">
 
-                    Enter Admin Dashboard
-
-                    <span>→</span>
+                    Reset Password
 
                 </button>
 
 
-                <!-- Security Notice -->
-                <div class="admin-security-note">
-
-                    <span>!</span>
-
-                    <p>
-                        Frontend demonstration only.
-                        Real administrator authentication will
-                        later be implemented using Java, SQL
-                        and Tomcat.
-                    </p>
-
-                </div>
+                <p id="forgotMessage"></p>
 
 
-                <!-- Back -->
-                <a
-                    href="index.html"
-                    class="admin-main-link">
+                <p>
 
-                    Return to main page
+                    <a
+                        href="#"
+                        onclick="hideForgotPassword(); return false;">
 
-                </a>
+                        Back to Admin Login
 
-            </form>
+                    </a>
 
-        </section>
+                </p>
 
-    </main>
+            </div>
 
+        </div>
 
-    <!-- Footer -->
-    <footer class="admin-footer">
-
-        <strong>
-            ROGASREE MART
-        </strong>
-
-        <span>
-            Administration Centre · © 2026
-        </span>
-
-    </footer>
+    </div>
 
 
     <script>
 
-        /*
-            Show / Hide Admin Password
-        */
+        /* =========================
+           ADMIN LOGIN
+        ========================= */
 
-        const adminPassword =
-            document.getElementById("adminPassword");
+        document
+            .getElementById("adminLoginForm")
+            .addEventListener("submit", async function(event) {
 
-        const adminToggle =
-            document.getElementById("adminTogglePassword");
-
-
-        adminToggle.addEventListener("click", function () {
-
-            if (adminPassword.type === "password") {
-
-                adminPassword.type = "text";
-
-                adminToggle.textContent = "Hide";
-
-            } else {
-
-                adminPassword.type = "password";
-
-                adminToggle.textContent = "Show";
-
-            }
-
-        });
+                event.preventDefault();
 
 
-        /*
-            Admin Login Validation
-        */
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
 
-        const adminForm =
-            document.getElementById("adminLoginForm");
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
 
 
-        adminForm.addEventListener("submit", function (event) {
+                const button =
+                    document.getElementById(
+                        "adminLoginButton"
+                    );
 
-            event.preventDefault();
 
+                const message =
+                    document.getElementById(
+                        "adminMessage"
+                    );
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Logging in...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "http://localhost:8080/admin/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    email: email,
+                                    password: password
+                                })
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Admin login failed"
+                        );
+
+                    }
+
+
+                    const admin =
+                        await response.json();
+
+
+                    if (!admin || !admin.id) {
+
+                        message.textContent =
+                            "Invalid admin email or password.";
+
+                        message.style.color =
+                            "red";
+
+                        return;
+
+                    }
+
+
+                    localStorage.setItem(
+                        "adminId",
+                        admin.id
+                    );
+
+
+                    localStorage.setItem(
+                        "adminName",
+                        admin.name
+                    );
+
+
+                    localStorage.setItem(
+                        "adminEmail",
+                        admin.email
+                    );
+
+
+                    message.textContent =
+                        "Admin login successful!";
+
+                    message.style.color =
+                        "green";
+
+
+                    setTimeout(function() {
+
+                        window.location.href =
+                            "admin-dashboard.html";
+
+                    }, 500);
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+
+                    message.textContent =
+                        "Backend connection failed. Please start Spring Boot.";
+
+                    message.style.color =
+                        "red";
+
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Admin Login";
+
+                }
+
+            });
+
+
+        /* =========================
+           SHOW FORGOT PASSWORD
+        ========================= */
+
+        function showForgotPassword() {
+
+            document
+                .getElementById("forgotPasswordSection")
+                .style.display = "block";
+
+        }
+
+
+        /* =========================
+           HIDE FORGOT PASSWORD
+        ========================= */
+
+        function hideForgotPassword() {
+
+            document
+                .getElementById("forgotPasswordSection")
+                .style.display = "none";
+
+        }
+
+
+        /* =========================
+           RESET ADMIN PASSWORD
+        ========================= */
+
+        async function resetAdminPassword() {
 
             const email =
-                document.getElementById("adminEmail")
-                .value
-                .trim();
-
-            const password =
-                document.getElementById("adminPassword")
-                .value
-                .trim();
+                document
+                    .getElementById("forgotEmail")
+                    .value
+                    .trim();
 
 
-            const emailError =
-                document.getElementById("adminEmailError");
-
-            const passwordError =
-                document.getElementById("adminPasswordError");
-
-
-            emailError.textContent = "";
-            passwordError.textContent = "";
+            const newPassword =
+                document
+                    .getElementById("newPassword")
+                    .value;
 
 
-            let valid = true;
-
-
-            if (email === "") {
-
-                emailError.textContent =
-                    "Please enter the administrator email.";
-
-                valid = false;
-
-            } else if (!email.includes("@")) {
-
-                emailError.textContent =
-                    "Please enter a valid email address.";
-
-                valid = false;
-
-            }
-
-
-            if (password === "") {
-
-                passwordError.textContent =
-                    "Please enter your password.";
-
-                valid = false;
-
-            } else if (password.length < 6) {
-
-                passwordError.textContent =
-                    "Password must contain at least 6 characters.";
-
-                valid = false;
-
-            }
-
-
-            /*
-                Demo authentication only.
-
-                Real authentication will be handled later
-                through Java + SQL + Tomcat.
-            */
-
-            if (valid) {
-
-                alert(
-                    "Demo admin login successful! " +
-                    "Admin Dashboard will be connected later."
+            const resetButton =
+                document.getElementById(
+                    "resetPasswordButton"
                 );
 
-                // Later:
-                // window.location.href =
-                // "admin-dashboard.html";
+
+            const forgotMessage =
+                document.getElementById(
+                    "forgotMessage"
+                );
+
+
+            if (!email || !newPassword) {
+
+                forgotMessage.textContent =
+                    "Please enter email and new password.";
+
+                forgotMessage.style.color =
+                    "red";
+
+                return;
 
             }
 
-        });
+
+            resetButton.disabled = true;
+
+            resetButton.textContent =
+                "Updating...";
 
 
-        /*
-            Forgot Password
-        */
+            try {
 
-        function adminForgotPassword() {
+                const response =
+                    await fetch(
+                        "http://localhost:8080/admin/forgot-password",
+                        {
+                            method: "POST",
 
-            alert(
-                "Admin password recovery will be added later."
-            );
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                email: email,
+
+                                newPassword: newPassword
+
+                            })
+                        }
+                    );
+
+
+                const result =
+                    await response.text();
+
+
+                if (result ===
+                    "Password updated successfully") {
+
+                    forgotMessage.textContent =
+                        "Password updated successfully!";
+
+                    forgotMessage.style.color =
+                        "green";
+
+
+                    document
+                        .getElementById("forgotEmail")
+                        .value = "";
+
+
+                    document
+                        .getElementById("newPassword")
+                        .value = "";
+
+
+                } else {
+
+                    forgotMessage.textContent =
+                        result;
+
+                    forgotMessage.style.color =
+                        "red";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                forgotMessage.textContent =
+                    "Backend connection failed. Please start Spring Boot.";
+
+                forgotMessage.style.color =
+                    "red";
+
+            } finally {
+
+                resetButton.disabled = false;
+
+                resetButton.textContent =
+                    "Reset Password";
+
+            }
 
         }
 

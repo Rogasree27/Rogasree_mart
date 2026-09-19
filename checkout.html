@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | ROGASREE MART</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>Checkout</h1>
+
+    <div id="checkoutItems">
+        <p>Loading order details...</p>
+    </div>
+
+    <hr>
+
+    <h2>Order Summary</h2>
+
+    <p>
+        Total Items:
+        <span id="totalItems">0</span>
+    </p>
+
+    <p>
+        Total Amount:
+        ₹<span id="totalAmount">0</span>
+    </p>
+
+    <button type="button" id="placeOrderButton">
+        Place Order
+    </button>
+
+    <p id="message"></p>
+
+
+    <script>
+
+        const userId =
+            localStorage.getItem("loggedInUserId");
+
+        const checkoutItems =
+            document.getElementById("checkoutItems");
+
+        const totalItems =
+            document.getElementById("totalItems");
+
+        const totalAmount =
+            document.getElementById("totalAmount");
+
+        const placeOrderButton =
+            document.getElementById("placeOrderButton");
+
+        const message =
+            document.getElementById("message");
+
+
+        let cart = [];
+        let products = [];
+        let orderTotal = 0;
+
+
+        async function loadCheckout() {
+
+            if (!userId) {
+
+                checkoutItems.innerHTML =
+                    "<p>Please login first.</p>";
+
+                placeOrderButton.disabled = true;
+
+                return;
+            }
+
+
+            try {
+
+                const cartResponse =
+                    await fetch(
+                        "http://localhost:8080/cart/" +
+                        userId
+                    );
+
+
+                if (!cartResponse.ok) {
+
+                    throw new Error(
+                        "Unable to load cart"
+                    );
+                }
+
+
+                cart =
+                    await cartResponse.json();
+
+
+                const productResponse =
+                    await fetch(
+                        "http://localhost:8080/products"
+                    );
+
+
+                if (!productResponse.ok) {
+
+                    throw new Error(
+                        "Unable to load products"
+                    );
+                }
+
+
+                products =
+                    await productResponse.json();
+
+
+                checkoutItems.innerHTML = "";
+
+
+                if (cart.length === 0) {
+
+                    checkoutItems.innerHTML =
+                        "<p>Your cart is empty.</p>";
+
+                    totalItems.textContent = "0";
+                    totalAmount.textContent = "0";
+
+                    placeOrderButton.disabled = true;
+
+                    return;
+                }
+
+
+                let itemCount = 0;
+                orderTotal = 0;
+
+
+                cart.forEach(function(item) {
+
+                    const product =
+                        products.find(function(product) {
+
+                            return product.id ===
+                                item.productId;
+
+                        });
+
+
+                    if (!product) {
+                        return;
+                    }
+
+
+                    const itemTotal =
+                        product.price *
+                        item.quantity;
+
+
+                    itemCount +=
+                        item.quantity;
+
+                    orderTotal +=
+                        itemTotal;
+
+
+                    const itemDiv =
+                        document.createElement("div");
+
+
+                    itemDiv.innerHTML =
+
+                        "<h3>" +
+                        product.name +
+                        "</h3>" +
+
+                        "<p>Price: ₹" +
+                        product.price +
+                        "</p>" +
+
+                        "<p>Quantity: " +
+                        item.quantity +
+                        "</p>" +
+
+                        "<p>Item Total: ₹" +
+                        itemTotal +
+                        "</p>" +
+
+                        "<hr>";
+
+
+                    checkoutItems.appendChild(
+                        itemDiv
+                    );
+
+                });
+
+
+                totalItems.textContent =
+                    itemCount;
+
+                totalAmount.textContent =
+                    orderTotal;
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                checkoutItems.innerHTML =
+                    "<p>Unable to load checkout details.</p>";
+
+                placeOrderButton.disabled = true;
+            }
+        }
+
+
+        placeOrderButton.addEventListener(
+            "click",
+            async function() {
+
+                if (!userId) {
+
+                    alert("Please login first.");
+
+                    return;
+                }
+
+
+                if (orderTotal <= 0) {
+
+                    alert("Your cart is empty.");
+
+                    return;
+                }
+
+
+                placeOrderButton.disabled = true;
+
+                placeOrderButton.textContent =
+                    "Placing Order...";
+
+
+                try {
+
+                    const orderResponse =
+                        await fetch(
+                            "http://localhost:8080/orders",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    userId:
+                                        Number(userId),
+
+                                    totalAmount:
+                                        orderTotal,
+
+                                    status:
+                                        "PLACED"
+
+                                })
+                            }
+                        );
+
+
+                    if (!orderResponse.ok) {
+
+                        throw new Error(
+                            "Unable to place order"
+                        );
+                    }
+
+
+                    const order =
+                        await orderResponse.json();
+
+
+                    /*
+                     * Remove the cart items
+                     * after the order is saved.
+                     */
+
+                    for (const item of cart) {
+
+                        await fetch(
+                            "http://localhost:8080/cart/" +
+                            item.id,
+                            {
+                                method: "DELETE"
+                            }
+                        );
+                    }
+
+
+                    message.textContent =
+                        "Order placed successfully!";
+
+                    message.style.color =
+                        "green";
+
+
+                    placeOrderButton.textContent =
+                        "Order Placed";
+
+
+                    checkoutItems.innerHTML =
+                        "<h2>Thank you for your order!</h2>" +
+                        "<p>Order ID: " +
+                        order.id +
+                        "</p>" +
+                        "<p>Total: ₹" +
+                        order.totalAmount +
+                        "</p>" +
+                        "<p>Status: " +
+                        order.status +
+                        "</p>";
+
+
+                    totalItems.textContent =
+                        "0";
+
+                    totalAmount.textContent =
+                        "0";
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    message.textContent =
+                        "Unable to place order.";
+
+                    message.style.color =
+                        "red";
+
+                    placeOrderButton.disabled =
+                        false;
+
+                    placeOrderButton.textContent =
+                        "Place Order";
+                }
+
+            }
+        );
+
+
+        loadCheckout();
+
+    </script>
+
+</body>
+
+</html>

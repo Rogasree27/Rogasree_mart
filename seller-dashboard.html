@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Seller Dashboard | ROGASREE MART</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>ROGASREE MART - Seller Dashboard</h1>
+
+    <h2>Seller Information</h2>
+
+    <p>
+        Seller Name:
+        <span id="sellerName">Loading...</span>
+    </p>
+
+    <p>
+        Seller Email:
+        <span id="sellerEmail">Loading...</span>
+    </p>
+
+    <hr>
+
+    <h2>Add Product</h2>
+
+    <form id="productForm">
+
+        <p>
+            <label>Product Name</label><br>
+            <input type="text" id="productName" required>
+        </p>
+
+        <p>
+            <label>Price</label><br>
+            <input type="number" id="productPrice" required>
+        </p>
+
+        <p>
+            <label>Description</label><br>
+            <textarea id="productDescription" required></textarea>
+        </p>
+
+        <p>
+            <label>Image Name</label><br>
+            <input type="text" id="productImage" placeholder="example.jpg">
+        </p>
+
+        <button type="submit">
+            Add Product
+        </button>
+
+    </form>
+
+    <p id="productMessage"></p>
+
+    <hr>
+
+    <h2>Products</h2>
+
+    <div id="products">
+        <p>Loading products...</p>
+    </div>
+
+    <hr>
+
+    <button onclick="sellerLogout()">
+        Logout
+    </button>
+
+
+    <script>
+
+        const sellerId =
+            localStorage.getItem("sellerId");
+
+        const sellerName =
+            localStorage.getItem("sellerName");
+
+        const sellerEmail =
+            localStorage.getItem("sellerEmail");
+
+
+        // Check seller login
+        if (!sellerId) {
+
+            document.body.innerHTML =
+                "<h2>Please login as seller first.</h2>";
+
+        } else {
+
+            document.getElementById("sellerName")
+                .textContent =
+                sellerName || "Seller";
+
+            document.getElementById("sellerEmail")
+                .textContent =
+                sellerEmail || "Not available";
+
+            loadProducts();
+
+        }
+
+
+        // Load products
+        async function loadProducts() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/products"
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Unable to load products"
+                    );
+                }
+
+                const products =
+                    await response.json();
+
+                const productsDiv =
+                    document.getElementById("products");
+
+                productsDiv.innerHTML = "";
+
+
+                if (products.length === 0) {
+
+                    productsDiv.innerHTML =
+                        "<p>No products found.</p>";
+
+                    return;
+                }
+
+
+                products.forEach(function(product) {
+
+                    const productDiv =
+                        document.createElement("div");
+
+                    productDiv.innerHTML =
+
+                        "<h3>" +
+                        product.name +
+                        "</h3>" +
+
+                        "<p>Product ID: " +
+                        product.id +
+                        "</p>" +
+
+                        "<p>Price: ₹" +
+                        product.price +
+                        "</p>" +
+
+                        "<p>Description: " +
+                        (product.description || "No description") +
+                        "</p>" +
+
+                        "<hr>";
+
+                    productsDiv.appendChild(productDiv);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById("products")
+                    .innerHTML =
+                    "<p>Unable to load products.</p>";
+
+            }
+
+        }
+
+
+        // Add product
+        document.getElementById("productForm")
+            .addEventListener(
+                "submit",
+                async function(event) {
+
+                    event.preventDefault();
+
+
+                    const productName =
+                        document.getElementById(
+                            "productName"
+                        ).value.trim();
+
+
+                    const productPrice =
+                        Number(
+                            document.getElementById(
+                                "productPrice"
+                            ).value
+                        );
+
+
+                    const productDescription =
+                        document.getElementById(
+                            "productDescription"
+                        ).value.trim();
+
+
+                    const productImage =
+                        document.getElementById(
+                            "productImage"
+                        ).value.trim();
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                "http://localhost:8080/products",
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body: JSON.stringify({
+
+                                        name:
+                                            productName,
+
+                                        price:
+                                            productPrice,
+
+                                        description:
+                                            productDescription,
+
+                                        image:
+                                            productImage
+
+                                    })
+                                }
+                            );
+
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                "Product could not be added"
+                            );
+
+                        }
+
+
+                        document.getElementById(
+                            "productMessage"
+                        ).textContent =
+                            "Product added successfully!";
+
+
+                        document.getElementById(
+                            "productForm"
+                        ).reset();
+
+
+                        loadProducts();
+
+
+                    } catch (error) {
+
+                        console.error(error);
+
+                        document.getElementById(
+                            "productMessage"
+                        ).textContent =
+                            "Unable to add product.";
+
+                    }
+
+                }
+            );
+
+
+        // Seller logout
+        function sellerLogout() {
+
+            localStorage.removeItem("sellerId");
+            localStorage.removeItem("sellerName");
+            localStorage.removeItem("sellerEmail");
+
+            window.location.href =
+                "seller-login.html";
+        }
+
+    </script>
+
+</body>
+
+</html>

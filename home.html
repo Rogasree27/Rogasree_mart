@@ -2,915 +2,350 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Home | ROGASREE MART</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
+<body>
 
-<body class="home-page">
+    <header>
 
+        <h1>ROGASREE MART</h1>
 
-    <!-- =========================
-         NAVIGATION
-    ========================== -->
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="cart.html">Cart</a>
+            <a href="wishlist.html">Wishlist</a>
 
-    <header class="shop-header">
-
-        <a
-            href="home.html"
-            class="shop-brand">
-
-            <div class="shop-logo">
-                R
-            </div>
-
-            <div>
-                <h1>ROGASREE MART</h1>
-
-                <p>
-                    Discover. Choose. Enjoy.
-                </p>
-            </div>
-
-        </a>
-
-
-        <!-- Desktop Navigation -->
-
-        <nav class="shop-nav">
-
-            <a
-                href="home.html"
-                class="active">
-                Home
-            </a>
-
-            <a href="#categories">
-                Categories
-            </a>
-
-            <a href="#products">
-                Products
-            </a>
-
-            <a href="#offers">
-                Offers
-            </a>
-
+            <button
+                type="button"
+                onclick="logout()">
+                Logout
+            </button>
         </nav>
-
-
-        <!-- Header Actions -->
-
-        <div class="shop-actions">
-
-            <button
-                type="button"
-                onclick="showDemoFeature('Search')"
-                aria-label="Search">
-                🔍
-            </button>
-
-
-            <button
-                type="button"
-                onclick="showDemoFeature('Wishlist')"
-                aria-label="Wishlist">
-                ♡
-            </button>
-
-
-            <button
-                type="button"
-                onclick="window.location.href='cart.html'"
-                aria-label="Cart">
-                🛒
-            </button>
-
-
-            <button
-                type="button"
-                onclick="showDemoFeature('Profile')"
-                aria-label="Profile">
-                👤
-            </button>
-
-        </div>
-
-
-        <!-- Mobile Menu -->
-
-        <button
-            class="mobile-menu-button"
-            type="button"
-            onclick="toggleMobileMenu()">
-
-            ☰
-
-        </button>
 
     </header>
 
 
-    <!-- Mobile Navigation -->
-
-    <nav
-        id="mobileNav"
-        class="mobile-nav">
-
-        <a href="home.html">
-            Home
-        </a>
-
-        <a href="#categories">
-            Categories
-        </a>
-
-        <a href="#products">
-            Products
-        </a>
-
-        <a href="#offers">
-            Offers
-        </a>
-
-    </nav>
-
-
-    <!-- =========================
-         HERO
-    ========================== -->
-
     <main>
 
-
-        <section class="shop-hero">
-
-            <div class="hero-content">
-
-                <span class="hero-label">
-                    YOUR MARKETPLACE, YOUR WAY
-                </span>
-
-
-                <h2>
-                    Good finds.
-                    <span>Better choices.</span>
-                </h2>
-
-
-                <p>
-                    Explore everyday essentials, stylish finds,
-                    useful gadgets, and more — all brought together
-                    in one easy shopping experience.
-                </p>
-
-
-                <div class="hero-buttons">
-
-                    <a
-                        href="#products"
-                        class="primary-shop-button">
-
-                        Shop Now
-
-                        <span>→</span>
-
-                    </a>
-
-
-                    <a
-                        href="#categories"
-                        class="secondary-shop-button">
-
-                        Explore Categories
-
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- Hero Visual -->
-
-            <div class="hero-visual">
-
-                <div class="hero-circle large-circle">
-                </div>
-
-                <div class="hero-circle small-circle">
-                </div>
-
-
-                <div class="hero-product-card">
-
-                    <span class="mini-label">
-                        TODAY'S PICK
-                    </span>
-
-                    <div class="hero-product-icon">
-                        ✨
-                    </div>
-
-                    <h3>
-                        Curated for you
-                    </h3>
-
-                    <p>
-                        Fresh products waiting to be discovered.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             CATEGORIES
-        ========================== -->
-
-        <section
-            id="categories"
-            class="categories-section">
-
-            <div class="shop-section-heading">
-
-                <div>
-
-                    <span>
-                        BROWSE BY TYPE
-                    </span>
-
-                    <h2>
-                        Find what fits your day.
-                    </h2>
-
-                </div>
-
-
-                <a href="#products">
-                    View products →
-                </a>
-
-            </div>
-
-
-            <div class="category-grid">
-
-
-                <article class="category-item">
-
-                    <div class="category-icon">
-                        👗
-                    </div>
-
-                    <h3>
-                        Fashion
-                    </h3>
-
-                    <p>
-                        Everyday styles
-                    </p>
-
-                </article>
-
-
-                <article class="category-item">
-
-                    <div class="category-icon">
-                        💻
-                    </div>
-
-                    <h3>
-                        Electronics
-                    </h3>
-
-                    <p>
-                        Smart essentials
-                    </p>
-
-                </article>
-
-
-                <article class="category-item">
-
-                    <div class="category-icon">
-                        🏠
-                    </div>
-
-                    <h3>
-                        Home
-                    </h3>
-
-                    <p>
-                        Comfort & living
-                    </p>
-
-                </article>
-
-
-                <article class="category-item">
-
-                    <div class="category-icon">
-                        ✨
-                    </div>
-
-                    <h3>
-                        Beauty
-                    </h3>
-
-                    <p>
-                        Care & wellness
-                    </p>
-
-                </article>
-
-
-                <article class="category-item">
-
-                    <div class="category-icon">
-                        👜
-                    </div>
-
-                    <h3>
-                        Accessories
-                    </h3>
-
-                    <p>
-                        Complete your look
-                    </p>
-
-                </article>
-
-
-                <article class="category-item">
-
-                    <div class="category-icon">
-                        ⚽
-                    </div>
-
-                    <h3>
-                        Sports
-                    </h3>
-
-                    <p>
-                        Move with energy
-                    </p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             FEATURED PRODUCTS
-        ========================== -->
-
-        <section
-            id="products"
-            class="products-section">
-
-            <div class="shop-section-heading">
-
-                <div>
-
-                    <span>
-                        HANDPICKED FOR YOU
-                    </span>
-
-                    <h2>
-                        Featured products
-                    </h2>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    onclick="showDemoFeature('Product filtering')">
-
-                    View all →
-
-                </button>
-
-            </div>
-
-
-            <div class="product-grid">
-
-
-                <!-- Product 1 -->
-
-                <article class="product-card">
-
-                    <div class="product-image product-one">
-
-                        <span>
-                            NEW
-                        </span>
-
-                        <button
-                            type="button"
-                            onclick="addToWishlist('Urban Tote')">
-
-                            ♡
-
-                        </button>
-
-                        <div>
-                            👜
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-details">
-
-                        <small>
-                            ACCESSORIES
-                        </small>
-
-                        <h3>
-                            Urban Canvas Tote
-                        </h3>
-
-                        <p>
-                            Lightweight everyday carry bag.
-                        </p>
-
-
-                        <div class="product-bottom">
-
-                            <strong>
-                                ₹799
-                            </strong>
-
-                            <span>
-                                ★ 4.7
-                            </span>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            onclick="addToCart('Urban Canvas Tote')"
-                            class="add-cart-button">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 2 -->
-
-                <article class="product-card">
-
-                    <div class="product-image product-two">
-
-                        <span>
-                            SALE
-                        </span>
-
-                        <button
-                            type="button"
-                            onclick="addToWishlist('Wireless Headphones')">
-
-                            ♡
-
-                        </button>
-
-                        <div>
-                            🎧
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-details">
-
-                        <small>
-                            ELECTRONICS
-                        </small>
-
-                        <h3>
-                            Wireless Headphones
-                        </h3>
-
-                        <p>
-                            Comfortable sound for every moment.
-                        </p>
-
-
-                        <div class="product-bottom">
-
-                            <strong>
-                                ₹1,899
-                            </strong>
-
-                            <span>
-                                ★ 4.8
-                            </span>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            onclick="addToCart('Wireless Headphones')"
-                            class="add-cart-button">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 3 -->
-
-                <article class="product-card">
-
-                    <div class="product-image product-three">
-
-                        <span>
-                            POPULAR
-                        </span>
-
-                        <button
-                            type="button"
-                            onclick="addToWishlist('Desk Lamp')">
-
-                            ♡
-
-                        </button>
-
-                        <div>
-                            💡
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-details">
-
-                        <small>
-                            HOME
-                        </small>
-
-                        <h3>
-                            Warm Glow Desk Lamp
-                        </h3>
-
-                        <p>
-                            Minimal lighting for your workspace.
-                        </p>
-
-
-                        <div class="product-bottom">
-
-                            <strong>
-                                ₹1,249
-                            </strong>
-
-                            <span>
-                                ★ 4.6
-                            </span>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            onclick="addToCart('Warm Glow Desk Lamp')"
-                            class="add-cart-button">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 4 -->
-
-                <article class="product-card">
-
-                    <div class="product-image product-four">
-
-                        <span>
-                            NEW
-                        </span>
-
-                        <button
-                            type="button"
-                            onclick="addToWishlist('Daily Sneakers')">
-
-                            ♡
-
-                        </button>
-
-                        <div>
-                            👟
-                        </div>
-
-                    </div>
-
-
-                    <div class="product-details">
-
-                        <small>
-                            FASHION
-                        </small>
-
-                        <h3>
-                            Daily Comfort Sneakers
-                        </h3>
-
-                        <p>
-                            Clean design with all-day comfort.
-                        </p>
-
-
-                        <div class="product-bottom">
-
-                            <strong>
-                                ₹2,199
-                            </strong>
-
-                            <span>
-                                ★ 4.9
-                            </span>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            onclick="addToCart('Daily Comfort Sneakers')"
-                            class="add-cart-button">
-
-                            Add to Cart
-
-                        </button>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             OFFER BANNER
-        ========================== -->
-
-        <section
-            id="offers"
-            class="offer-section">
-
-            <div>
-
-                <span>
-                    WEEKEND SPECIAL
-                </span>
-
-                <h2>
-                    Little upgrades,
-                    better prices.
-                </h2>
-
-                <p>
-                    Discover selected products with
-                    special demo offers.
-                </p>
-
-            </div>
-
-
-            <button
-                type="button"
-                onclick="showDemoFeature('Special offers')">
-
-                Explore Offers →
-
-            </button>
-
-        </section>
-
-
-        <!-- =========================
-             NEW ARRIVALS
-        ========================== -->
-
-        <section class="new-arrivals">
-
-            <div class="shop-section-heading">
-
-                <div>
-
-                    <span>
-                        JUST ARRIVED
-                    </span>
-
-                    <h2>
-                        New arrivals
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <div class="arrival-grid">
-
-                <article>
-                    <span>01</span>
-                    <h3>Fresh styles</h3>
-                    <p>
-                        New fashion picks for everyday wear.
-                    </p>
-                </article>
-
-
-                <article>
-                    <span>02</span>
-                    <h3>Smart gadgets</h3>
-                    <p>
-                        Useful technology for modern routines.
-                    </p>
-                </article>
-
-
-                <article>
-                    <span>03</span>
-                    <h3>Home favourites</h3>
-                    <p>
-                        Simple pieces for a better space.
-                    </p>
-                </article>
-
-            </div>
-
-        </section>
+        <h2>Our Products</h2>
+
+        <div id="productGrid">
+            <p>Loading products...</p>
+        </div>
 
     </main>
 
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer class="shop-footer">
-
-        <div>
-
-            <strong>
-                ROGASREE MART
-            </strong>
-
-            <p>
-                Your everyday marketplace.
-            </p>
-
-        </div>
-
-
-        <div class="footer-links">
-
-            <a href="#categories">
-                Categories
-            </a>
-
-            <a href="#products">
-                Products
-            </a>
-
-            <a href="#offers">
-                Offers
-            </a>
-
-        </div>
-
-
-        <div>
-
-            <p>
-                © 2026 ROGASREE MART
-            </p>
-
-            <small>
-                Student capstone project
-            </small>
-
-        </div>
-
-    </footer>
-
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
-
     <script>
 
-        /*
-            Mobile navigation
-        */
-
-        function toggleMobileMenu() {
-
-            const mobileNav =
-                document.getElementById("mobileNav");
-
-            mobileNav.classList.toggle("show");
-
-        }
+        const userId =
+            localStorage.getItem("loggedInUserId");
 
 
-        /*
-            Demo feature message
-        */
+        // =========================
+        // LOGOUT
+        // =========================
 
-        function showDemoFeature(feature) {
+        function logout() {
 
-            alert(
-                feature +
-                " functionality will be connected in the next development stage."
+            localStorage.removeItem(
+                "loggedInUserId"
             );
 
+            localStorage.removeItem(
+                "loggedInUserName"
+            );
+
+            localStorage.removeItem(
+                "loggedInUserEmail"
+            );
+
+            alert("Logged out successfully!");
+
+            window.location.href =
+                "login.html";
         }
 
 
-        /*
-            Demo cart
-        */
-       function addToCart(productName) {
+        // =========================
+        // ADD TO CART
+        // =========================
 
-    let cart =
-        JSON.parse(localStorage.getItem("rogasreeCart")) || [];
+        async function addToCart(productId) {
 
-    cart.push({
-        name: productName,
-        quantity: 1
-    });
+            if (!userId) {
 
-    localStorage.setItem(
-        "rogasreeCart",
-        JSON.stringify(cart)
-    );
+                alert("Please login first.");
 
-    alert(
-        productName +
-        " has been added to your cart!"
-    );
+                window.location.href =
+                    "login.html";
 
-}
+                return;
+            }
 
 
-        /*
-            Demo wishlist
-        */
-       function addToWishlist(productName) {
-    let wishlist =
-        JSON.parse(localStorage.getItem("rogasreeWishlist")) || [];
+            try {
 
-    wishlist.push(productName);
+                const response =
+                    await fetch(
+                        "http://localhost:8080/cart",
+                        {
+                            method: "POST",
 
-    localStorage.setItem(
-        "rogasreeWishlist",
-        JSON.stringify(wishlist)
-    );
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-    alert(productName + " has been added to your wishlist.");
-}
+                            body: JSON.stringify({
+
+                                userId:
+                                    Number(userId),
+
+                                productId:
+                                    Number(productId),
+
+                                quantity: 1
+
+                            })
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to add to cart"
+                    );
+                }
+
+
+                alert(
+                    "Product added to cart!"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to add product to cart."
+                );
+            }
+        }
+
+
+        // =========================
+        // ADD TO WISHLIST
+        // =========================
+
+        async function addToWishlist(productId) {
+
+            if (!userId) {
+
+                alert("Please login first.");
+
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/wishlist",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                userId:
+                                    Number(userId),
+
+                                productId:
+                                    Number(productId)
+
+                            })
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to add to wishlist"
+                    );
+                }
+
+
+                alert(
+                    "Product added to wishlist!"
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to add product to wishlist."
+                );
+            }
+        }
+
+
+        // =========================
+        // LOAD PRODUCTS
+        // =========================
+
+        async function loadProducts() {
+
+            const productGrid =
+                document.getElementById(
+                    "productGrid"
+                );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/products"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load products"
+                    );
+                }
+
+
+                const products =
+                    await response.json();
+
+
+                productGrid.innerHTML = "";
+
+
+                if (products.length === 0) {
+
+                    productGrid.innerHTML =
+                        "<p>No products available.</p>";
+
+                    return;
+                }
+
+
+                products.forEach(function(product) {
+
+                    const productCard =
+                        document.createElement(
+                            "article"
+                        );
+
+
+                    productCard.className =
+                        "product-card";
+
+
+                    productCard.innerHTML = `
+
+                        <div class="product-image product-three">
+
+                            <span>AVAILABLE</span>
+
+                            <button
+                                type="button"
+                                onclick="addToWishlist(${product.id})">
+                                ♡
+                            </button>
+
+                            <div>🛍️</div>
+
+                        </div>
+
+
+                        <div class="product-details">
+
+                            <small>
+                                ROGASREE MART
+                            </small>
+
+                            <h3>
+                                ${product.name}
+                            </h3>
+
+                            <p>
+                                ${product.description ||
+                                "Quality product from ROGASREE MART."}
+                            </p>
+
+
+                            <div class="product-bottom">
+
+                                <strong>
+                                    ₹${product.price}
+                                </strong>
+
+                                <span>
+                                    ★ 4.8
+                                </span>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                onclick="addToCart(${product.id})"
+                                class="add-cart-button">
+
+                                Add to Cart
+
+                            </button>
+
+                        </div>
+                    `;
+
+
+                    productGrid.appendChild(
+                        productCard
+                    );
+
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                productGrid.innerHTML =
+                    "<p>Unable to load products from server.</p>";
+            }
+        }
+
+
+        // Load products when page opens
+        loadProducts();
+
     </script>
+
 
 </body>
 

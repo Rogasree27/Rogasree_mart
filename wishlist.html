@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Wishlist | ROGASREE MART</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -11,42 +15,181 @@
     <h1>My Wishlist</h1>
 
     <div id="wishlistItems">
-        <p>Your wishlist is empty.</p>
+        <p>Loading wishlist...</p>
     </div>
 
+
     <script>
-function displayWishlist() {
-    let wishlist = JSON.parse(localStorage.getItem("rogasreeWishlist")) || [];
 
-    let wishlistItems = document.getElementById("wishlistItems");
+        const userId =
+            localStorage.getItem("loggedInUserId");
 
-    if (wishlist.length === 0) {
-        wishlistItems.innerHTML = "<p>Your wishlist is empty.</p>";
-        return;
-    }
+        const wishlistItems =
+            document.getElementById("wishlistItems");
 
-    wishlistItems.innerHTML = "";
 
-    wishlist.forEach(function(item) {
-        wishlistItems.innerHTML +=
-        wishlistItems.innerHTML += "<div><b>" + item + "</b> <button onclick=\"removeFromWishlist('" + item + "')\">Remove</button></div>";
-    });
-}
+        async function displayWishlist() {
 
-function removeFromWishlist(productName) {
-    let wishlist = JSON.parse(localStorage.getItem("rogasreeWishlist")) || [];
+            if (!userId) {
 
-    wishlist = wishlist.filter(function(item) {
-        return item !== productName;
-    });
+                wishlistItems.innerHTML =
+                    "<p>Please login first.</p>";
 
-    localStorage.setItem("rogasreeWishlist", JSON.stringify(wishlist));
+                return;
+            }
 
-    displayWishlist();
-}
 
-displayWishlist();
+            try {
+
+                const wishlistResponse =
+                    await fetch(
+                        "http://localhost:8080/wishlist/" +
+                        userId
+                    );
+
+
+                if (!wishlistResponse.ok) {
+
+                    throw new Error(
+                        "Unable to load wishlist"
+                    );
+                }
+
+
+                const wishlist =
+                    await wishlistResponse.json();
+
+
+                const productResponse =
+                    await fetch(
+                        "http://localhost:8080/products"
+                    );
+
+
+                if (!productResponse.ok) {
+
+                    throw new Error(
+                        "Unable to load products"
+                    );
+                }
+
+
+                const products =
+                    await productResponse.json();
+
+
+                wishlistItems.innerHTML = "";
+
+
+                if (wishlist.length === 0) {
+
+                    wishlistItems.innerHTML =
+                        "<p>Your wishlist is empty.</p>";
+
+                    return;
+                }
+
+
+                wishlist.forEach(function(item) {
+
+                    const product =
+                        products.find(function(product) {
+
+                            return product.id ===
+                                item.productId;
+
+                        });
+
+
+                    if (!product) {
+                        return;
+                    }
+
+
+                    const itemDiv =
+                        document.createElement("div");
+
+
+                    itemDiv.innerHTML =
+
+                        "<h3>" +
+                        product.name +
+                        "</h3>" +
+
+                        "<p>Price: ₹" +
+                        product.price +
+                        "</p>" +
+
+                        "<button type='button' " +
+                        "onclick='removeFromWishlist(" +
+                        item.id +
+                        ")'>" +
+                        "Remove" +
+                        "</button>" +
+
+                        "<hr>";
+
+
+                    wishlistItems.appendChild(itemDiv);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                wishlistItems.innerHTML =
+                    "<p>Unable to load wishlist from server.</p>";
+            }
+        }
+
+
+        async function removeFromWishlist(wishlistId) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/wishlist/" +
+                        wishlistId,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to remove item"
+                    );
+                }
+
+
+                alert(
+                    "Item removed from wishlist!"
+                );
+
+
+                displayWishlist();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to remove wishlist item."
+                );
+            }
+        }
+
+
+        displayWishlist();
+
     </script>
 
 </body>
+
 </html>
