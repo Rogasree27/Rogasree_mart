@@ -2,30 +2,174 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Home | ROGASREE MART</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-box input {
+            width: 80%;
+            max-width: 500px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .product-card {
+            margin-bottom: 30px;
+        }
+
+        .product-image {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            background: #f5f1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .product-image span {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 2;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .wishlist-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .no-image {
+            font-size: 60px;
+        }
+
+        .review-section {
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .review-section h4 {
+            margin-bottom: 10px;
+        }
+
+        .review-item {
+            background: #f7f7f7;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+        }
+
+        .review-form {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 10px;
+        }
+
+        .review-form select,
+        .review-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px;
+            box-sizing: border-box;
+        }
+
+        .review-form textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .review-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .already-reviewed {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .delivery-message {
+            color: #777;
+            margin-top: 10px;
+        }
+
+        .average-rating {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+    </style>
+
 </head>
 
+
 <body>
+
 
     <header>
 
         <h1>ROGASREE MART</h1>
 
         <nav>
-            <a href="home.html">Home</a>
-            <a href="cart.html">Cart</a>
-            <a href="wishlist.html">Wishlist</a>
+
+            <a href="home.html">
+                Home
+            </a>
+
+            <a href="cart.html">
+                Cart
+            </a>
+
+            <a href="wishlist.html">
+                Wishlist
+            </a>
 
             <button
                 type="button"
                 onclick="logout()">
+
                 Logout
+
             </button>
+
         </nav>
 
     </header>
@@ -35,8 +179,22 @@
 
         <h2>Our Products</h2>
 
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search products..."
+                oninput="searchProducts()">
+
+        </div>
+
+
         <div id="productGrid">
+
             <p>Loading products...</p>
+
         </div>
 
     </main>
@@ -44,8 +202,14 @@
 
     <script>
 
+
         const userId =
             localStorage.getItem("loggedInUserId");
+
+
+        let allProducts = [];
+
+        let deliveredProductIds = [];
 
 
         // =========================
@@ -71,6 +235,7 @@
             window.location.href =
                 "login.html";
         }
+
 
 
         // =========================
@@ -123,6 +288,7 @@
                     throw new Error(
                         "Unable to add to cart"
                     );
+
                 }
 
 
@@ -140,6 +306,7 @@
                 );
             }
         }
+
 
 
         // =========================
@@ -190,6 +357,7 @@
                     throw new Error(
                         "Unable to add to wishlist"
                     );
+
                 }
 
 
@@ -209,6 +377,94 @@
         }
 
 
+
+        // =========================
+        // LOAD DELIVERED PRODUCTS
+        // =========================
+
+        async function loadDeliveredProducts() {
+
+            if (!userId) {
+
+                deliveredProductIds = [];
+
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/orders/" +
+                        Number(userId)
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load orders"
+                    );
+
+                }
+
+
+                const orders =
+                    await response.json();
+
+
+                deliveredProductIds = [];
+
+
+                orders.forEach(function(order) {
+
+                    if (
+                        order.status &&
+                        order.status.toLowerCase() ===
+                        "delivered"
+                    ) {
+
+                        if (order.productIds) {
+
+                            const ids =
+                                order.productIds
+                                    .split(",")
+                                    .map(function(id) {
+                                        return Number(
+                                            id.trim()
+                                        );
+                                    });
+
+                            ids.forEach(function(id) {
+
+                                if (
+                                    !deliveredProductIds.includes(id)
+                                ) {
+
+                                    deliveredProductIds.push(id);
+
+                                }
+
+                            });
+
+                        }
+
+                    }
+
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                deliveredProductIds = [];
+            }
+        }
+
+
+
         // =========================
         // LOAD PRODUCTS
         // =========================
@@ -223,6 +479,9 @@
 
             try {
 
+                await loadDeliveredProducts();
+
+
                 const response =
                     await fetch(
                         "http://localhost:8080/products"
@@ -234,101 +493,15 @@
                     throw new Error(
                         "Failed to load products"
                     );
+
                 }
 
 
-                const products =
+                allProducts =
                     await response.json();
 
 
-                productGrid.innerHTML = "";
-
-
-                if (products.length === 0) {
-
-                    productGrid.innerHTML =
-                        "<p>No products available.</p>";
-
-                    return;
-                }
-
-
-                products.forEach(function(product) {
-
-                    const productCard =
-                        document.createElement(
-                            "article"
-                        );
-
-
-                    productCard.className =
-                        "product-card";
-
-
-                    productCard.innerHTML = `
-
-                        <div class="product-image product-three">
-
-                            <span>AVAILABLE</span>
-
-                            <button
-                                type="button"
-                                onclick="addToWishlist(${product.id})">
-                                ♡
-                            </button>
-
-                            <div>🛍️</div>
-
-                        </div>
-
-
-                        <div class="product-details">
-
-                            <small>
-                                ROGASREE MART
-                            </small>
-
-                            <h3>
-                                ${product.name}
-                            </h3>
-
-                            <p>
-                                ${product.description ||
-                                "Quality product from ROGASREE MART."}
-                            </p>
-
-
-                            <div class="product-bottom">
-
-                                <strong>
-                                    ₹${product.price}
-                                </strong>
-
-                                <span>
-                                    ★ 4.8
-                                </span>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                onclick="addToCart(${product.id})"
-                                class="add-cart-button">
-
-                                Add to Cart
-
-                            </button>
-
-                        </div>
-                    `;
-
-
-                    productGrid.appendChild(
-                        productCard
-                    );
-
-                });
+                displayProducts(allProducts);
 
 
             } catch (error) {
@@ -341,8 +514,617 @@
         }
 
 
-        // Load products when page opens
+
+        // =========================
+        // DISPLAY PRODUCTS
+        // =========================
+
+        async function displayProducts(products) {
+
+            const productGrid =
+                document.getElementById(
+                    "productGrid"
+                );
+
+
+            productGrid.innerHTML = "";
+
+
+            if (products.length === 0) {
+
+                productGrid.innerHTML =
+                    "<p>No products found.</p>";
+
+                return;
+            }
+
+
+            for (const product of products) {
+
+                const productCard =
+                    document.createElement(
+                        "article"
+                    );
+
+
+                productCard.className =
+                    "product-card";
+
+
+                let imageHTML = "";
+
+
+                if (
+                    product.image &&
+                    product.image.trim() !== ""
+                ) {
+
+                    imageHTML = `
+
+                        <img
+                            src="${product.image}"
+                            alt="${product.name}"
+                            onerror="
+                                this.style.display='none';
+                                this.nextElementSibling.style.display='block';
+                            "
+                        >
+
+                        <div
+                            class="no-image"
+                            style="display:none;">
+
+                            🛍️
+
+                        </div>
+
+                    `;
+
+                } else {
+
+                    imageHTML = `
+
+                        <div class="no-image">
+
+                            🛍️
+
+                        </div>
+
+                    `;
+                }
+
+
+
+                // Get reviews
+
+                let reviews = [];
+
+                try {
+
+                    const reviewResponse =
+                        await fetch(
+                            "http://localhost:8080/reviews/product/" +
+                            product.id
+                        );
+
+
+                    if (reviewResponse.ok) {
+
+                        reviews =
+                            await reviewResponse.json();
+
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                }
+
+
+
+                // Calculate rating
+
+                let averageRating = 0;
+
+
+                if (reviews.length > 0) {
+
+                    let totalRating = 0;
+
+
+                    reviews.forEach(function(review) {
+
+                        totalRating +=
+                            Number(review.rating);
+
+                    });
+
+
+                    averageRating =
+                        totalRating / reviews.length;
+
+                }
+
+
+
+                let reviewHTML = "";
+
+
+                // =========================
+                // REVIEWS DISPLAY
+                // =========================
+
+                if (reviews.length > 0) {
+
+                    reviewHTML += `
+
+                        <div class="review-section">
+
+                            <h4>
+                                Customer Reviews
+                            </h4>
+
+                            <div class="average-rating">
+
+                                ⭐
+                                ${averageRating.toFixed(1)}
+                                / 5
+
+                            </div>
+
+                    `;
+
+
+                    reviews.forEach(function(review) {
+
+                        reviewHTML += `
+
+                            <div class="review-item">
+
+                                <strong>
+                                    ⭐ ${review.rating}/5
+                                </strong>
+
+                                <p>
+                                    ${review.comment || ""}
+                                </p>
+
+                            </div>
+
+                        `;
+
+                    });
+
+
+                    reviewHTML += `
+
+                        </div>
+
+                    `;
+
+                }
+
+
+
+                // =========================
+                // REVIEW FORM
+                // =========================
+
+                if (
+                    deliveredProductIds.includes(
+                        Number(product.id)
+                    )
+                ) {
+
+                    const alreadyReviewed =
+                        reviews.some(function(review) {
+
+                            return Number(
+                                review.userId
+                            ) === Number(userId);
+
+                        });
+
+
+                    if (alreadyReviewed) {
+
+                        reviewHTML += `
+
+                            <div class="review-section">
+
+                                <p class="already-reviewed">
+
+                                    ✓ You already reviewed this product.
+
+                                </p>
+
+                            </div>
+
+                        `;
+
+                    } else {
+
+                        reviewHTML += `
+
+                            <div class="review-section">
+
+                                <h4>
+                                    Write a Review
+                                </h4>
+
+                                <div class="review-form">
+
+                                    <label>
+                                        Rating
+                                    </label>
+
+                                    <select
+                                        id="rating-${product.id}">
+
+                                        <option value="5">
+                                            ⭐⭐⭐⭐⭐ - 5
+                                        </option>
+
+                                        <option value="4">
+                                            ⭐⭐⭐⭐ - 4
+                                        </option>
+
+                                        <option value="3">
+                                            ⭐⭐⭐ - 3
+                                        </option>
+
+                                        <option value="2">
+                                            ⭐⭐ - 2
+                                        </option>
+
+                                        <option value="1">
+                                            ⭐ - 1
+                                        </option>
+
+                                    </select>
+
+
+                                    <label>
+                                        Comment
+                                    </label>
+
+                                    <textarea
+                                        id="comment-${product.id}"
+                                        placeholder="Write your review...">
+                                    </textarea>
+
+
+                                    <button
+                                        type="button"
+                                        class="review-button"
+                                        onclick="submitReview(${product.id})">
+
+                                        Submit Review
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                } else {
+
+                    reviewHTML += `
+
+                        <div class="review-section">
+
+                            <p class="delivery-message">
+
+                                🚚 Review available after delivery.
+
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+
+                // =========================
+                // PRODUCT CARD
+                // =========================
+
+                productCard.innerHTML = `
+
+                    <div class="product-image">
+
+                        <span>
+                            AVAILABLE
+                        </span>
+
+
+                        <button
+                            type="button"
+                            class="wishlist-button"
+                            onclick="addToWishlist(${product.id})">
+
+                            ♡
+
+                        </button>
+
+
+                        ${imageHTML}
+
+                    </div>
+
+
+                    <div class="product-details">
+
+                        <small>
+                            ROGASREE MART
+                        </small>
+
+
+                        <h3>
+                            ${product.name}
+                        </h3>
+
+
+                        <p>
+
+                            ${
+                                product.description ||
+                                "Quality product from ROGASREE MART."
+                            }
+
+                        </p>
+
+
+                        <div class="product-bottom">
+
+                            <strong>
+                                ₹${product.price}
+                            </strong>
+
+
+                            <span>
+
+                                ${
+                                    reviews.length > 0
+                                    ? "★ " +
+                                      averageRating.toFixed(1)
+                                    : "★ 4.8"
+                                }
+
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            onclick="addToCart(${product.id})"
+                            class="add-cart-button">
+
+                            Add to Cart
+
+                        </button>
+
+
+                        ${reviewHTML}
+
+                    </div>
+
+                `;
+
+
+                productGrid.appendChild(
+                    productCard
+                );
+
+            }
+
+        }
+
+
+
+        // =========================
+        // SUBMIT REVIEW
+        // =========================
+
+        async function submitReview(productId) {
+
+            if (!userId) {
+
+                alert("Please login first.");
+
+                return;
+            }
+
+
+            const rating =
+                Number(
+                    document.getElementById(
+                        "rating-" + productId
+                    ).value
+                );
+
+
+            const comment =
+                document.getElementById(
+                    "comment-" + productId
+                ).value.trim();
+
+
+            if (!comment) {
+
+                alert(
+                    "Please enter your review."
+                );
+
+                return;
+            }
+
+
+            try {
+
+                // Check existing reviews again
+
+                const checkResponse =
+                    await fetch(
+                        "http://localhost:8080/reviews/product/" +
+                        productId
+                    );
+
+
+                const existingReviews =
+                    await checkResponse.json();
+
+
+                const alreadyReviewed =
+                    existingReviews.some(
+                        function(review) {
+
+                            return Number(
+                                review.userId
+                            ) === Number(userId);
+
+                        }
+                    );
+
+
+                if (alreadyReviewed) {
+
+                    alert(
+                        "You have already reviewed this product."
+                    );
+
+                    await loadProducts();
+
+                    return;
+                }
+
+
+
+                // Submit review
+
+                const response =
+                    await fetch(
+                        "http://localhost:8080/reviews",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                userId:
+                                    Number(userId),
+
+                                productId:
+                                    Number(productId),
+
+                                rating:
+                                    rating,
+
+                                comment:
+                                    comment
+
+                            })
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to submit review"
+                    );
+
+                }
+
+
+                alert(
+                    "Review submitted successfully!"
+                );
+
+
+                // Reload products
+
+                await loadProducts();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to submit review."
+                );
+            }
+
+        }
+
+
+
+        // =========================
+        // SEARCH PRODUCTS
+        // =========================
+
+        function searchProducts() {
+
+            const searchText =
+                document.getElementById(
+                    "searchInput"
+                ).value
+                .toLowerCase()
+                .trim();
+
+
+            const filteredProducts =
+                allProducts.filter(
+                    function(product) {
+
+                        const name =
+                            (
+                                product.name || ""
+                            ).toLowerCase();
+
+
+                        const description =
+                            (
+                                product.description || ""
+                            ).toLowerCase();
+
+
+                        return (
+                            name.includes(searchText) ||
+                            description.includes(searchText)
+                        );
+
+                    }
+                );
+
+
+            displayProducts(
+                filteredProducts
+            );
+
+        }
+
+
+
+        // =========================
+        // START
+        // =========================
+
         loadProducts();
+
 
     </script>
 

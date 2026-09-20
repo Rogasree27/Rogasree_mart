@@ -7,22 +7,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "orders")
-public class Order {
+@Table(name = "reviews")
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long userId;
+    private Long productId;
+    private int rating;
+    private String comment;
 
-    private double totalAmount;
-
-    private String status = "Pending";
-
-    private String productIds;
-
-    public Order() {
+    public Review() {
     }
 
     public Long getId() {
@@ -41,27 +38,27 @@ public class Order {
         this.userId = userId;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
-    public String getStatus() {
-        return status;
+    public int getRating() {
+        return rating;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
-    public String getProductIds() {
-        return productIds;
+    public String getComment() {
+        return comment;
     }
 
-    public void setProductIds(String productIds) {
-        this.productIds = productIds;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

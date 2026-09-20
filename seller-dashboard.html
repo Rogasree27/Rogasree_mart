@@ -1,308 +1,993 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Seller Dashboard | ROGASREE MART</title>
+    <title>Seller Dashboard - Rogasree Mart</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .seller-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #222;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .add-btn {
+            margin-top: 15px;
+            background: #222;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #444;
+        }
+
+        #imagePreview {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 10px;
+            display: none;
+            border-radius: 8px;
+        }
+
+        #products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .product-card {
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .product-card h3 {
+            margin: 10px 0 5px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+
+        #orders {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .order-card {
+            width: 400px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .order-card h3 {
+            margin-top: 0;
+        }
+
+        .status {
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        .placed {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .confirmed {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .shipped {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .delivered {
+            background: #198754;
+            color: white;
+        }
+
+        .status-button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .status-button:hover {
+            background: #555;
+        }
+
+        .completed {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>ROGASREE MART - Seller Dashboard</h1>
+<header>
+    <h1>Rogasree Mart - Seller Dashboard</h1>
 
-    <h2>Seller Information</h2>
-
-    <p>
-        Seller Name:
-        <span id="sellerName">Loading...</span>
-    </p>
-
-    <p>
-        Seller Email:
-        <span id="sellerEmail">Loading...</span>
-    </p>
-
-    <hr>
-
-    <h2>Add Product</h2>
-
-    <form id="productForm">
-
-        <p>
-            <label>Product Name</label><br>
-            <input type="text" id="productName" required>
-        </p>
-
-        <p>
-            <label>Price</label><br>
-            <input type="number" id="productPrice" required>
-        </p>
-
-        <p>
-            <label>Description</label><br>
-            <textarea id="productDescription" required></textarea>
-        </p>
-
-        <p>
-            <label>Image Name</label><br>
-            <input type="text" id="productImage" placeholder="example.jpg">
-        </p>
-
-        <button type="submit">
-            Add Product
-        </button>
-
-    </form>
-
-    <p id="productMessage"></p>
-
-    <hr>
-
-    <h2>Products</h2>
-
-    <div id="products">
-        <p>Loading products...</p>
-    </div>
-
-    <hr>
-
-    <button onclick="sellerLogout()">
+    <button class="logout-btn" onclick="logout()">
         Logout
     </button>
+</header>
 
 
-    <script>
+<div class="container">
 
-        const sellerId =
-            localStorage.getItem("sellerId");
+    <!-- SELLER INFORMATION -->
+    <div class="seller-info">
+        <h2>Seller Information</h2>
 
-        const sellerName =
-            localStorage.getItem("sellerName");
+        <p>
+            <b>Seller Name:</b>
+            <span id="sellerName">Seller</span>
+        </p>
 
-        const sellerEmail =
-            localStorage.getItem("sellerEmail");
+        <p>
+            <b>Role:</b> Seller
+        </p>
+    </div>
 
 
-        // Check seller login
-        if (!sellerId) {
+    <!-- ADD PRODUCT -->
+    <div class="section">
 
-            document.body.innerHTML =
-                "<h2>Please login as seller first.</h2>";
+        <h2>Add Product</h2>
 
-        } else {
+        <form id="productForm">
 
-            document.getElementById("sellerName")
-                .textContent =
-                sellerName || "Seller";
+            <label>Product Name</label>
 
-            document.getElementById("sellerEmail")
-                .textContent =
-                sellerEmail || "Not available";
+            <input
+                type="text"
+                id="productName"
+                placeholder="Enter product name"
+                required
+            >
+
+
+            <label>Price</label>
+
+            <input
+                type="number"
+                id="productPrice"
+                placeholder="Enter price"
+                required
+            >
+
+
+            <label>Description</label>
+
+            <textarea
+                id="productDescription"
+                placeholder="Enter product description"
+                required
+            ></textarea>
+
+
+            <label>Product Image</label>
+
+            <input
+                type="file"
+                id="productImage"
+                accept="image/*"
+                required
+            >
+
+            <img
+                id="imagePreview"
+                alt="Image Preview"
+            >
+
+
+            <button
+                type="submit"
+                class="add-btn"
+            >
+                Add Product
+            </button>
+
+        </form>
+
+        <p id="productMessage"></p>
+
+    </div>
+
+
+    <!-- PRODUCTS -->
+    <div class="section">
+
+        <h2>My Products</h2>
+
+        <div id="products">
+            <p>Loading products...</p>
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER ORDERS -->
+    <div class="section">
+
+        <h2>Customer Orders</h2>
+
+        <div id="orders">
+            <p>Loading orders...</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================
+       SELLER LOGIN CHECK
+       ========================= */
+
+    const sellerName =
+        localStorage.getItem("sellerName");
+
+    if (sellerName) {
+        document.getElementById("sellerName").textContent =
+            sellerName;
+    }
+
+
+    /* =========================
+       IMAGE PREVIEW
+       ========================= */
+
+    document
+        .getElementById("productImage")
+        .addEventListener("change", function(event) {
+
+            const file = event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+
+                const preview =
+                    document.getElementById("imagePreview");
+
+                preview.src = e.target.result;
+
+                preview.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+
+    /* =========================
+       ADD PRODUCT
+       ========================= */
+
+    document
+        .getElementById("productForm")
+        .addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const name =
+                document.getElementById("productName").value;
+
+            const price =
+                document.getElementById("productPrice").value;
+
+            const description =
+                document.getElementById("productDescription").value;
+
+            const imageFile =
+                document.getElementById("productImage").files[0];
+
+
+            if (!imageFile) {
+
+                alert("Please select an image.");
+
+                return;
+            }
+
+
+            const reader = new FileReader();
+
+
+            reader.onload = async function() {
+
+                const product = {
+
+                    name: name,
+
+                    price: parseFloat(price),
+
+                    description: description,
+
+                    image: reader.result
+                };
+
+
+                try {
+
+                    const response = await fetch(
+                        "http://localhost:8080/products",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify(product)
+                        }
+                    );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Unable to add product"
+                        );
+                    }
+
+
+                    alert("Product added successfully!");
+
+
+                    document
+                        .getElementById("productForm")
+                        .reset();
+
+
+                    document
+                        .getElementById("imagePreview")
+                        .style.display = "none";
+
+
+                    loadProducts();
+
+                }
+
+                catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Unable to add product."
+                    );
+                }
+
+            };
+
+
+            reader.readAsDataURL(imageFile);
+
+        });
+
+
+    /* =========================
+       LOAD PRODUCTS
+       ========================= */
+
+    async function loadProducts() {
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8080/products"
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load products"
+                );
+            }
+
+
+            const products =
+                await response.json();
+
+
+            const productsDiv =
+                document.getElementById("products");
+
+
+            productsDiv.innerHTML = "";
+
+
+            if (products.length === 0) {
+
+                productsDiv.innerHTML =
+                    "<p>No products available.</p>";
+
+                return;
+            }
+
+
+            products.forEach(function(product) {
+
+                const productDiv =
+                    document.createElement("div");
+
+
+                productDiv.className =
+                    "product-card";
+
+
+                let imageHTML = "";
+
+
+                if (product.image) {
+
+                    imageHTML =
+                        "<img src='" +
+                        product.image +
+                        "' alt='Product Image'>";
+
+                } else {
+
+                    imageHTML =
+                        "<p>No image</p>";
+                }
+
+
+                productDiv.innerHTML =
+
+                    imageHTML +
+
+                    "<h3>" +
+                    product.name +
+                    "</h3>" +
+
+                    "<p class='price'>₹" +
+                    product.price +
+                    "</p>" +
+
+                    "<p>" +
+                    product.description +
+                    "</p>" +
+
+                    "<button class='remove-btn' " +
+                    "onclick='removeProduct(" +
+                    product.id +
+                    ")'>" +
+                    "Remove Product" +
+                    "</button>";
+
+
+                productsDiv.appendChild(
+                    productDiv
+                );
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            document.getElementById("products").innerHTML =
+                "<p class='error'>" +
+                "Unable to load products." +
+                "</p>";
+        }
+
+    }
+
+
+    /* =========================
+       REMOVE PRODUCT
+       ========================= */
+
+    async function removeProduct(productId) {
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to remove this product?"
+            );
+
+
+        if (!confirmDelete) {
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8080/products/" +
+                productId,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to remove product"
+                );
+            }
+
+
+            alert(
+                "Product removed successfully!"
+            );
+
 
             loadProducts();
 
         }
 
+        catch (error) {
 
-        // Load products
-        async function loadProducts() {
+            console.error(error);
 
-            try {
+            alert(
+                "Unable to remove product."
+            );
+        }
 
-                const response =
-                    await fetch(
-                        "http://localhost:8080/products"
-                    );
-
-                if (!response.ok) {
-                    throw new Error(
-                        "Unable to load products"
-                    );
-                }
-
-                const products =
-                    await response.json();
-
-                const productsDiv =
-                    document.getElementById("products");
-
-                productsDiv.innerHTML = "";
+    }
 
 
-                if (products.length === 0) {
+    /* =========================
+       LOAD CUSTOMER ORDERS
+       ========================= */
 
-                    productsDiv.innerHTML =
-                        "<p>No products found.</p>";
+    async function loadOrders() {
 
-                    return;
-                }
+        try {
 
-
-                products.forEach(function(product) {
-
-                    const productDiv =
-                        document.createElement("div");
-
-                    productDiv.innerHTML =
-
-                        "<h3>" +
-                        product.name +
-                        "</h3>" +
-
-                        "<p>Product ID: " +
-                        product.id +
-                        "</p>" +
-
-                        "<p>Price: ₹" +
-                        product.price +
-                        "</p>" +
-
-                        "<p>Description: " +
-                        (product.description || "No description") +
-                        "</p>" +
-
-                        "<hr>";
-
-                    productsDiv.appendChild(productDiv);
-
-                });
+            const response = await fetch(
+                "http://localhost:8080/orders/all"
+            );
 
 
-            } catch (error) {
+            if (!response.ok) {
 
-                console.error(error);
-
-                document.getElementById("products")
-                    .innerHTML =
-                    "<p>Unable to load products.</p>";
-
+                throw new Error(
+                    "Unable to load orders"
+                );
             }
+
+
+            const orders =
+                await response.json();
+
+
+            const ordersDiv =
+                document.getElementById("orders");
+
+
+            ordersDiv.innerHTML = "";
+
+
+            if (orders.length === 0) {
+
+                ordersDiv.innerHTML =
+                    "<p>No customer orders found.</p>";
+
+                return;
+            }
+
+
+            orders.forEach(function(order) {
+
+                const orderDiv =
+                    document.createElement("div");
+
+
+                orderDiv.className =
+                    "order-card";
+
+
+                /*
+                    IMPORTANT:
+
+                    Existing orders have status:
+                    PLACED
+
+                    New workflow:
+                    PLACED/Pending
+                    ↓
+                    Confirmed
+                    ↓
+                    Shipped
+                    ↓
+                    Delivered
+                */
+
+
+                const status =
+                    order.status || "Pending";
+
+
+                let nextButton = "";
+
+
+                if (
+                    status === "PLACED" ||
+                    status === "Pending"
+                ) {
+
+                    nextButton =
+
+                        "<button " +
+                        "class='status-button' " +
+                        "onclick='updateOrderStatus(" +
+                        order.id +
+                        ", \"Confirmed\")'>" +
+
+                        "Confirm Order" +
+
+                        "</button>";
+
+                }
+
+
+                else if (
+                    status === "Confirmed"
+                ) {
+
+                    nextButton =
+
+                        "<button " +
+                        "class='status-button' " +
+                        "onclick='updateOrderStatus(" +
+                        order.id +
+                        ", \"Shipped\")'>" +
+
+                        "Mark as Shipped" +
+
+                        "</button>";
+
+                }
+
+
+                else if (
+                    status === "Shipped"
+                ) {
+
+                    nextButton =
+
+                        "<button " +
+                        "class='status-button' " +
+                        "onclick='updateOrderStatus(" +
+                        order.id +
+                        ", \"Delivered\")'>" +
+
+                        "Mark as Delivered" +
+
+                        "</button>";
+
+                }
+
+
+                else if (
+                    status === "Delivered"
+                ) {
+
+                    nextButton =
+                        "<p class='completed'>" +
+                        "Order completed." +
+                        "</p>";
+
+                }
+
+
+                else {
+
+                    nextButton =
+
+                        "<button " +
+                        "class='status-button' " +
+                        "onclick='updateOrderStatus(" +
+                        order.id +
+                        ", \"Confirmed\")'>" +
+
+                        "Confirm Order" +
+
+                        "</button>";
+
+                }
+
+
+                let statusClass =
+                    status.toLowerCase();
+
+
+                orderDiv.innerHTML =
+
+                    "<h3>Order #" +
+                    order.id +
+                    "</h3>" +
+
+                    "<p>" +
+                    "<b>Customer ID:</b> " +
+                    order.userId +
+                    "</p>" +
+
+                    "<p>" +
+                    "<b>Total Amount:</b> ₹" +
+                    order.totalAmount +
+                    "</p>" +
+
+                    "<p>" +
+                    "<b>Status:</b>" +
+                    "</p>" +
+
+                    "<span class='status " +
+                    statusClass +
+                    "'>" +
+
+                    status +
+
+                    "</span>" +
+
+                    "<br>" +
+
+                    nextButton;
+
+
+                ordersDiv.appendChild(
+                    orderDiv
+                );
+
+            });
 
         }
 
+        catch (error) {
 
-        // Add product
-        document.getElementById("productForm")
-            .addEventListener(
-                "submit",
-                async function(event) {
+            console.error(error);
 
-                    event.preventDefault();
+            document.getElementById("orders").innerHTML =
 
+                "<p class='error'>" +
+                "Unable to load customer orders." +
+                "</p>";
+        }
 
-                    const productName =
-                        document.getElementById(
-                            "productName"
-                        ).value.trim();
+    }
 
 
-                    const productPrice =
-                        Number(
-                            document.getElementById(
-                                "productPrice"
-                            ).value
-                        );
+    /* =========================
+       UPDATE ORDER STATUS
+       ========================= */
 
+    async function updateOrderStatus(
+        orderId,
+        newStatus
+    ) {
 
-                    const productDescription =
-                        document.getElementById(
-                            "productDescription"
-                        ).value.trim();
+        try {
 
+            const response = await fetch(
 
-                    const productImage =
-                        document.getElementById(
-                            "productImage"
-                        ).value.trim();
+                "http://localhost:8080/orders/" +
+                orderId +
+                "/status",
 
+                {
+                    method: "PUT",
 
-                    try {
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                        const response =
-                            await fetch(
-                                "http://localhost:8080/products",
-                                {
-                                    method: "POST",
-
-                                    headers: {
-                                        "Content-Type":
-                                            "application/json"
-                                    },
-
-                                    body: JSON.stringify({
-
-                                        name:
-                                            productName,
-
-                                        price:
-                                            productPrice,
-
-                                        description:
-                                            productDescription,
-
-                                        image:
-                                            productImage
-
-                                    })
-                                }
-                            );
-
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                "Product could not be added"
-                            );
-
-                        }
-
-
-                        document.getElementById(
-                            "productMessage"
-                        ).textContent =
-                            "Product added successfully!";
-
-
-                        document.getElementById(
-                            "productForm"
-                        ).reset();
-
-
-                        loadProducts();
-
-
-                    } catch (error) {
-
-                        console.error(error);
-
-                        document.getElementById(
-                            "productMessage"
-                        ).textContent =
-                            "Unable to add product.";
-
-                    }
-
+                    body: JSON.stringify({
+                        status: newStatus
+                    })
                 }
             );
 
 
-        // Seller logout
-        function sellerLogout() {
+            if (!response.ok) {
 
-            localStorage.removeItem("sellerId");
-            localStorage.removeItem("sellerName");
-            localStorage.removeItem("sellerEmail");
+                throw new Error(
+                    "Unable to update status"
+                );
+            }
 
-            window.location.href =
-                "seller-login.html";
+
+            alert(
+                "Order status changed to " +
+                newStatus
+            );
+
+
+            loadOrders();
+
         }
 
-    </script>
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to update order status."
+            );
+        }
+
+    }
+
+
+    /* =========================
+       LOGOUT
+       ========================= */
+
+    function logout() {
+
+        localStorage.removeItem(
+            "sellerName"
+        );
+
+        localStorage.removeItem(
+            "sellerId"
+        );
+
+        window.location.href =
+            "login.html";
+    }
+
+
+    /* =========================
+       PAGE LOAD
+       ========================= */
+
+    loadProducts();
+
+    loadOrders();
+
+</script>
 
 </body>
-
 </html>

@@ -245,6 +245,14 @@
 
                 try {
 
+                    const productIds =
+                        cart.map(function(item) {
+
+                            return item.productId;
+
+                        }).join(",");
+
+
                     const orderResponse =
                         await fetch(
                             "http://localhost:8080/orders",
@@ -265,7 +273,10 @@
                                         orderTotal,
 
                                     status:
-                                        "PLACED"
+                                        "PLACED",
+
+                                    productIds:
+                                        productIds
 
                                 })
                             }
@@ -283,11 +294,6 @@
                     const order =
                         await orderResponse.json();
 
-
-                    /*
-                     * Remove the cart items
-                     * after the order is saved.
-                     */
 
                     for (const item of cart) {
 
@@ -314,12 +320,15 @@
 
                     checkoutItems.innerHTML =
                         "<h2>Thank you for your order!</h2>" +
+
                         "<p>Order ID: " +
                         order.id +
                         "</p>" +
+
                         "<p>Total: ₹" +
                         order.totalAmount +
                         "</p>" +
+
                         "<p>Status: " +
                         order.status +
                         "</p>";
@@ -341,6 +350,7 @@
 
                     message.style.color =
                         "red";
+
 
                     placeOrderButton.disabled =
                         false;
