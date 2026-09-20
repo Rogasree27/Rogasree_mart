@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageController {
 
-    @GetMapping("/login")
-    public String login() {
+    @GetMapping("/buyer-login")
+    public String buyerLogin() {
         return "forward:/login.html";
     }
 
