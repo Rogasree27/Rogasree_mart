@@ -10,4 +10,9 @@ public class HomeController {
     public String home() {
         return "forward:/index.html";
     }
+
+    @GetMapping("/login.html")
+    public String login() {
+        return "forward:/login.html";
+    }
 }
