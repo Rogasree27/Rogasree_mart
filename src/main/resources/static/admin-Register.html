@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Register | ROGASREE MART</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-box">
+            <h1>ROGASREE MART</h1>
+            <h2>Admin Register</h2>
+            <p>Create Admin Account</p>
+
+            <!-- ADMIN REGISTER FORM -->
+            <form id="adminRegisterForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Enter admin name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter admin email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit" id="adminRegisterButton">Register</button>
+            </form>
+
+            <p id="registerMessage" style="text-align: center; margin-top: 10px;"></p>
+
+            <p style="text-align: center; margin-top: 15px;">
+                Already have an account? <a href="admin-login.html" style="color: #007bff; text-decoration: none;">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = "https://rogasreemart-production.up.railway.app";
+
+        document.getElementById("adminRegisterForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const button = document.getElementById("adminRegisterButton");
+            const message = document.getElementById("registerMessage");
+
+            button.disabled = true;
+            button.textContent = "Registering...";
+            message.textContent = "";
+
+            try {
+                const response = await fetch(BASE_URL + "/admin/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                if (response.ok) {
+                    message.textContent = "Registration successful! Redirecting to login...";
+                    message.style.color = "green";
+                    setTimeout(() => {
+                        window.location.href = "admin-login.html";
+                    }, 1500);
+                } else {
+                    const errorText = await response.text();
+                    message.textContent = errorText || "Registration failed. Try again.";
+                    message.style.color = "red";
+                }
+            } catch (error) {
+                console.error(error);
+                message.textContent = "Backend connection failed.";
+                message.style.color = "red";
+            } finally {
+                button.disabled = false;
+                button.textContent = "Register";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
