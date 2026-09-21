@@ -18,6 +18,7 @@ public class SellerController {
         if (seller == null || seller.getEmail() == null || seller.getPassword() == null) {
             return null;
         }
+
         return sellerRepository.findByEmailAndPassword(
                 seller.getEmail(),
                 seller.getPassword()
