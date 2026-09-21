@@ -203,11 +203,11 @@
         ========================= */
         async function resetAdminPassword() {
             const email = document.getElementById("forgotEmail").value.trim();
-            const newPassword = document.getElementById("newPassword").value;
+            const password = document.getElementById("newPassword").value;
             const resetButton = document.getElementById("resetPasswordButton");
             const forgotMessage = document.getElementById("forgotMessage");
 
-            if (!email || !newPassword) {
+            if (!email || !password) {
                 forgotMessage.textContent = "Please enter email and new password.";
                 forgotMessage.style.color = "red";
                 return;
@@ -225,7 +225,7 @@
                     },
                     body: JSON.stringify({
                         email: email,
-                        newPassword: newPassword
+                        password: password
                     })
                 });
 
