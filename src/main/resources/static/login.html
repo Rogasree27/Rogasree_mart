@@ -247,7 +247,7 @@
 
                         const response =
                             await fetch(
-                                "http://localhost:8080/login",
+                                "/login",
                                 {
                                     method: "POST",
 
@@ -265,15 +265,6 @@
                                     })
                                 }
                             );
-
-
-                        /*
-                         * IMPORTANT:
-                         *
-                         * Backend response received.
-                         * So don't immediately treat
-                         * response.ok as connection failure.
-                         */
 
 
                         let user = null;
@@ -355,11 +346,6 @@
 
                     } catch (error) {
 
-                        /*
-                         * This happens only when
-                         * Spring Boot cannot be reached.
-                         */
-
                         console.error(
                             "Backend connection error:",
                             error
@@ -367,7 +353,7 @@
 
 
                         loginMessage.textContent =
-                            "Backend connection failed. Please start Spring Boot.";
+                            "Backend connection failed.";
 
                         loginMessage.style.color =
                             "red";
@@ -480,7 +466,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:8080/forgot-password",
+                        "/forgot-password",
                         {
                             method: "POST",
 
@@ -547,7 +533,7 @@
 
 
                 forgotMessage.textContent =
-                    "Backend connection failed. Please start Spring Boot.";
+                    "Backend connection failed.";
 
                 forgotMessage.style.color =
                     "red";
