@@ -2,17 +2,11 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Seller Login & Registration | ROGASREE MART</title>
-
+    <title>Seller Login, Registration & Forgot Password | ROGASREE MART</title>
     <link rel="stylesheet" href="style.css">
-
     <style>
-
         body {
             background-color: #f5f1e8;
             font-family: Arial, sans-serif;
@@ -76,6 +70,14 @@
             background-color: #145a32;
         }
 
+        .links-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
         .switch-text {
             text-align: center;
             margin-top: 20px;
@@ -83,14 +85,14 @@
             font-size: 14px;
         }
 
-        .switch-text a {
+        .switch-text a, .links-row a {
             color: #0b3d20;
             text-decoration: none;
             font-weight: bold;
             cursor: pointer;
         }
 
-        .switch-text a:hover {
+        .switch-text a:hover, .links-row a:hover {
             text-decoration: underline;
         }
 
@@ -111,9 +113,7 @@
         .hidden {
             display: none;
         }
-
     </style>
-
 </head>
 
 <body>
@@ -125,7 +125,6 @@
             <h2>Seller Login</h2>
 
             <form id="sellerLoginForm" onsubmit="handleSellerLogin(event)">
-
                 <div class="form-group">
                     <label for="sellerEmail">Seller email</label>
                     <input type="email" id="sellerEmail" required placeholder="seller@rogasree.com">
@@ -138,6 +137,9 @@
 
                 <button type="submit" class="login-btn">Enter Seller Centre</button>
 
+                <div class="links-row">
+                    <a onclick="toggleForm('forgot')">Forgot password?</a>
+                </div>
             </form>
 
             <div class="switch-text">
@@ -150,7 +152,6 @@
             <h2>New Seller Registration</h2>
 
             <form id="sellerRegisterForm" onsubmit="handleSellerRegister(event)">
-
                 <div class="form-group">
                     <label for="regName">Seller Name</label>
                     <input type="text" id="regName" required placeholder="Enter your name or store name">
@@ -167,7 +168,6 @@
                 </div>
 
                 <button type="submit" class="login-btn">Register & Login</button>
-
             </form>
 
             <div class="switch-text">
@@ -175,104 +175,127 @@
             </div>
         </div>
 
+        <!-- FORGOT PASSWORD FORM -->
+        <div id="forgotSection" class="hidden">
+            <h2>Reset Password</h2>
+
+            <form id="sellerForgotForm" onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label for="forgotEmail">Registered Email</label>
+                    <input type="email" id="forgotEmail" required placeholder="seller@rogasree.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" required placeholder="Enter new password">
+                </div>
+
+                <button type="submit" class="login-btn">Update Password</button>
+            </form>
+
+            <div class="switch-text">
+                Remember your password? <a onclick="toggleForm('login')">Login here</a>
+            </div>
+        </div>
+
         <a href="home.html" class="back-link">Return to main page</a>
     </div>
 
     <script>
-
-        // Toggle between Login and Register views
         function toggleForm(formType) {
             const loginSec = document.getElementById("loginSection");
             const regSec = document.getElementById("registerSection");
+            const forgotSec = document.getElementById("forgotSection");
+
+            loginSec.classList.add("hidden");
+            regSec.classList.add("hidden");
+            forgotSec.classList.add("hidden");
 
             if (formType === 'register') {
-                loginSec.classList.add("hidden");
                 regSec.classList.remove("hidden");
+            } else if (formType === 'forgot') {
+                forgotSec.classList.remove("hidden");
             } else {
-                regSec.classList.add("hidden");
                 loginSec.classList.remove("hidden");
             }
         }
 
-        // Handle Seller Login
+        // 1. Seller Login URL
         async function handleSellerLogin(event) {
             event.preventDefault();
-
             const email = document.getElementById("sellerEmail").value.trim();
             const password = document.getElementById("sellerPassword").value.trim();
 
             try {
                 const response = await fetch("/seller/login", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password
-                    })
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, password: password })
                 });
 
-                if (!response.ok) {
-                    throw new Error("Invalid email or password");
-                }
-
+                if (!response.ok) throw new Error("Invalid credentials");
                 const data = await response.json();
                 
                 localStorage.setItem("loggedInSellerId", data.id);
                 localStorage.setItem("loggedInSellerEmail", email);
-
                 alert("Login successful!");
                 window.location.href = "seller-dashboard.html";
-
             } catch (error) {
                 console.error(error);
-                alert("Backend connection failed or invalid credentials. Please check your Spring Boot deployment.");
+                alert("Login failed. Please check your email/password or backend deployment.");
             }
         }
 
-        // Handle New Seller Registration
+        // 2. Seller Registration URL (Matches RegisterController or seller endpoint)
         async function handleSellerRegister(event) {
             event.preventDefault();
-
             const name = document.getElementById("regName").value.trim();
             const email = document.getElementById("regEmail").value.trim();
             const password = document.getElementById("regPassword").value.trim();
 
             try {
+                // If your RegisterController uses a different path like "/register", change it here. 
+                // Using "/seller/register" or standard path based on backend structure:
                 const response = await fetch("/seller/register", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        email: email,
-                        password: password
-                    })
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name: name, email: email, password: password })
                 });
 
-                if (!response.ok) {
-                    throw new Error("Registration failed");
-                }
-
+                if (!response.ok) throw new Error("Registration failed");
                 const data = await response.json();
 
-                // Automatically save session and move to dashboard or login
                 localStorage.setItem("loggedInSellerId", data.id);
                 localStorage.setItem("loggedInSellerEmail", email);
-
-                alert("Registration successful! Welcome to Seller Centre.");
+                alert("Registration successful!");
                 window.location.href = "seller-dashboard.html";
-
             } catch (error) {
                 console.error(error);
-                alert("Registration failed. Email might already be registered or backend issue.");
+                alert("Registration failed. Email might already exist or backend endpoint needs checking.");
             }
         }
 
+        // 3. Forgot Password URL
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById("forgotEmail").value.trim();
+            const newPassword = document.getElementById("newPassword").value.trim();
+
+            try {
+                const response = await fetch("/seller/forgot-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, password: newPassword })
+                });
+
+                if (!response.ok) throw new Error("Reset failed");
+                alert("Password updated successfully! Please login.");
+                toggleForm('login');
+            } catch (error) {
+                console.error(error);
+                alert("Password reset failed. Please check backend configuration.");
+            }
+        }
     </script>
-
 </body>
-
 </html>
