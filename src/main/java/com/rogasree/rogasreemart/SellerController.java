@@ -1,7 +1,5 @@
 package com.rogasree.rogasreemart;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,25 +15,12 @@ public class SellerController {
 
     @PostMapping("/seller/login")
     public Seller sellerLogin(@RequestBody Seller seller) {
-
+        if (seller == null || seller.getEmail() == null || seller.getPassword() == null) {
+            return null;
+        }
         return sellerRepository.findByEmailAndPassword(
                 seller.getEmail(),
                 seller.getPassword()
         ).orElse(null);
-    }
-
-    @PostMapping("/seller/forgot-password")
-    public String forgotPassword(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        String newPassword = request.get("newPassword");
-
-        Seller seller = sellerRepository.findByEmail(email).orElse(null);
-        if (seller != null) {
-            seller.setPassword(newPassword);
-            sellerRepository.save(seller);
-            return "Password updated successfully";
-        } else {
-            return "Seller email not found";
-        }
     }
 }
