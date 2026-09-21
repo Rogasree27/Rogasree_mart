@@ -29,11 +29,6 @@
 
         .product-card {
             margin-bottom: 30px;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 16px;
-            background: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .product-image {
@@ -44,7 +39,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
         }
 
         .product-image img {
@@ -62,7 +56,6 @@
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 11px;
-            font-weight: bold;
         }
 
         .wishlist-button {
@@ -77,38 +70,10 @@
             background: white;
             font-size: 22px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .no-image {
             font-size: 60px;
-        }
-
-        .product-details {
-            margin-top: 15px;
-        }
-
-        .product-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 15px 0;
-        }
-
-        .add-cart-button {
-            width: 100%;
-            padding: 12px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .add-cart-button:hover {
-            background: #218838;
         }
 
         .review-section {
@@ -133,7 +98,6 @@
             padding: 15px;
             background: #fafafa;
             border-radius: 10px;
-            border: 1px solid #eee;
         }
 
         .review-form select,
@@ -142,8 +106,6 @@
             padding: 10px;
             margin: 5px 0 10px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 6px;
         }
 
         .review-form textarea {
@@ -153,16 +115,9 @@
 
         .review-button {
             padding: 10px 15px;
-            background: #007bff;
-            color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-        }
-
-        .review-button:hover {
-            background: #0069d9;
         }
 
         .already-reviewed {
@@ -304,7 +259,7 @@
 
                 const response =
                     await fetch(
-                        "/cart",
+                        "http://localhost:8080/cart",
                         {
                             method: "POST",
 
@@ -375,7 +330,7 @@
 
                 const response =
                     await fetch(
-                        "/wishlist",
+                        "http://localhost:8080/wishlist",
                         {
                             method: "POST",
 
@@ -441,7 +396,7 @@
 
                 const response =
                     await fetch(
-                        "/orders/" +
+                        "http://localhost:8080/orders/" +
                         Number(userId)
                     );
 
@@ -529,7 +484,7 @@
 
                 const response =
                     await fetch(
-                        "/products"
+                        "http://localhost:8080/products"
                     );
 
 
@@ -546,7 +501,7 @@
                     await response.json();
 
 
-                await displayProducts(allProducts);
+                displayProducts(allProducts);
 
 
             } catch (error) {
@@ -582,43 +537,6 @@
 
                 return;
             }
-
-
-            // Parallel reviews fetch
-            const productReviewsMap = {};
-
-            await Promise.all(
-                products.map(async (product) => {
-
-                    try {
-
-                        const reviewResponse =
-                            await fetch(
-                                "/reviews/product/" +
-                                product.id
-                            );
-
-                        if (reviewResponse.ok) {
-
-                            productReviewsMap[product.id] =
-                                await reviewResponse.json();
-
-                        } else {
-
-                            productReviewsMap[product.id] = [];
-
-                        }
-
-                    } catch (error) {
-
-                        console.error(error);
-
-                        productReviewsMap[product.id] = [];
-
-                    }
-
-                })
-            );
 
 
             for (const product of products) {
@@ -676,8 +594,36 @@
                 }
 
 
-                let reviews = productReviewsMap[product.id] || [];
 
+                // Get reviews
+
+                let reviews = [];
+
+                try {
+
+                    const reviewResponse =
+                        await fetch(
+                            "http://localhost:8080/reviews/product/" +
+                            product.id
+                        );
+
+
+                    if (reviewResponse.ok) {
+
+                        reviews =
+                            await reviewResponse.json();
+
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                }
+
+
+
+                // Calculate rating
 
                 let averageRating = 0;
 
@@ -704,6 +650,10 @@
 
                 let reviewHTML = "";
 
+
+                // =========================
+                // REVIEWS DISPLAY
+                // =========================
 
                 if (reviews.length > 0) {
 
@@ -756,6 +706,10 @@
                 }
 
 
+
+                // =========================
+                // REVIEW FORM
+                // =========================
 
                 if (
                     deliveredProductIds.includes(
@@ -877,6 +831,10 @@
                 }
 
 
+
+                // =========================
+                // PRODUCT CARD
+                // =========================
 
                 productCard.innerHTML = `
 
@@ -1012,9 +970,11 @@
 
             try {
 
+                // Check existing reviews again
+
                 const checkResponse =
                     await fetch(
-                        "/reviews/product/" +
+                        "http://localhost:8080/reviews/product/" +
                         productId
                     );
 
@@ -1047,9 +1007,12 @@
                 }
 
 
+
+                // Submit review
+
                 const response =
                     await fetch(
-                        "/reviews",
+                        "http://localhost:8080/reviews",
                         {
                             method: "POST",
 
@@ -1090,6 +1053,8 @@
                     "Review submitted successfully!"
                 );
 
+
+                // Reload products
 
                 await loadProducts();
 
