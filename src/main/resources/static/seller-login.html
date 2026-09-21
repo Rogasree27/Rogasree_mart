@@ -2,717 +2,273 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Seller Login | ROGASREE MART</title>
+    <title>Seller Login & Registration | ROGASREE MART</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            background-color: #f5f1e8;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+
+        .login-card h2 {
+            margin-bottom: 25px;
+            color: #0b3d20;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #0b3d20;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .login-btn:hover {
+            background-color: #145a32;
+        }
+
+        .switch-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .switch-text a {
+            color: #0b3d20;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .switch-text a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #0b3d20;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+    </style>
+
 </head>
 
-<body class="seller-login-page">
+<body>
 
-    <header class="seller-header">
+    <div class="login-card">
+        
+        <!-- SELLER LOGIN FORM -->
+        <div id="loginSection">
+            <h2>Seller Login</h2>
 
-        <a href="index.html" class="seller-brand">
+            <form id="sellerLoginForm" onsubmit="handleSellerLogin(event)">
 
-            <div class="seller-mark">
-                R
-            </div>
-
-            <div>
-                <h1>ROGASREE MART</h1>
-                <p>Seller Centre</p>
-            </div>
-
-        </a>
-
-        <a href="index.html" class="seller-back">
-            ← Back to roles
-        </a>
-
-    </header>
-
-
-    <main class="seller-container">
-
-        <section class="seller-intro">
-
-            <div class="seller-badge">
-                SELLER CENTRE
-            </div>
-
-            <h2>
-                Build your store.
-                <span>Grow your reach.</span>
-            </h2>
-
-            <p>
-                Sign in to manage your products, monitor orders,
-                view sales performance, and take your marketplace
-                business further.
-            </p>
-
-            <div class="seller-points">
-
-                <div class="seller-point">
-                    <span>01</span>
-
-                    <div>
-                        <strong>Manage products</strong>
-
-                        <small>
-                            Add and organize your products easily.
-                        </small>
-                    </div>
+                <div class="form-group">
+                    <label for="sellerEmail">Seller email</label>
+                    <input type="email" id="sellerEmail" required placeholder="seller@rogasree.com">
                 </div>
 
-
-                <div class="seller-point">
-                    <span>02</span>
-
-                    <div>
-                        <strong>Track orders</strong>
-
-                        <small>
-                            Keep an eye on incoming customer orders.
-                        </small>
-                    </div>
+                <div class="form-group">
+                    <label for="sellerPassword">Password</label>
+                    <input type="password" id="sellerPassword" required placeholder="********">
                 </div>
 
-
-                <div class="seller-point">
-                    <span>03</span>
-
-                    <div>
-                        <strong>Watch your growth</strong>
-
-                        <small>
-                            View sales and revenue information.
-                        </small>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <section class="seller-login-card">
-
-            <div class="seller-form-heading">
-
-                <span>SELLER LOGIN</span>
-
-                <h3>
-                    Welcome, seller
-                </h3>
-
-                <p>
-                    Sign in to access your seller dashboard.
-                </p>
-
-            </div>
-
-
-            <!-- SELLER LOGIN FORM -->
-
-            <form id="sellerLoginForm">
-
-                <div class="seller-input-group">
-
-                    <label for="sellerEmail">
-                        Seller email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="sellerEmail"
-                        placeholder="seller@example.com"
-                    >
-
-                    <small
-                        id="sellerEmailError"
-                        class="seller-error">
-                    </small>
-
-                </div>
-
-
-                <div class="seller-input-group">
-
-                    <label for="sellerPassword">
-                        Password
-                    </label>
-
-                    <div class="seller-password-box">
-
-                        <input
-                            type="password"
-                            id="sellerPassword"
-                            placeholder="Enter your password"
-                        >
-
-                        <button
-                            type="button"
-                            id="sellerTogglePassword">
-                            Show
-                        </button>
-
-                    </div>
-
-                    <small
-                        id="sellerPasswordError"
-                        class="seller-error">
-                    </small>
-
-                </div>
-
-
-                <div class="seller-options">
-
-                    <label>
-
-                        <input
-                            type="checkbox"
-                            id="sellerRemember">
-
-                        <span>Remember me</span>
-
-                    </label>
-
-
-                    <a
-                        href="#"
-                        onclick="showSellerForgotPassword(); return false;">
-
-                        Forgot password?
-
-                    </a>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="seller-login-button">
-
-                    Enter Seller Centre
-
-                    <span>→</span>
-
-                </button>
-
-
-                <div class="seller-demo-note">
-
-                    <span>i</span>
-
-                    <p>
-                        Seller authentication is connected
-                        to Java, MySQL and Spring Boot.
-                    </p>
-
-                </div>
-
-
-                <a
-                    href="index.html"
-                    class="seller-main-link">
-
-                    Return to main page
-
-                </a>
+                <button type="submit" class="login-btn">Enter Seller Centre</button>
 
             </form>
 
-
-            <!-- SELLER FORGOT PASSWORD -->
-
-            <div
-                id="sellerForgotPasswordSection"
-                style="display: none; margin-top: 25px;">
-
-                <hr>
-
-                <div class="seller-form-heading">
-
-                    <span>PASSWORD RECOVERY</span>
-
-                    <h3>
-                        Reset password
-                    </h3>
-
-                    <p>
-                        Enter your seller email and create a new password.
-                    </p>
-
-                </div>
-
-
-                <div class="seller-input-group">
-
-                    <label for="sellerForgotEmail">
-                        Seller email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="sellerForgotEmail"
-                        placeholder="seller@example.com"
-                    >
-
-                </div>
-
-
-                <div class="seller-input-group">
-
-                    <label for="sellerNewPassword">
-                        New Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="sellerNewPassword"
-                        placeholder="Enter new password"
-                    >
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="sellerResetPasswordButton"
-                    class="seller-login-button"
-                    onclick="resetSellerPassword()">
-
-                    Reset Password
-
-                    <span>→</span>
-
-                </button>
-
-
-                <p id="sellerForgotMessage"></p>
-
-
-                <p style="margin-top: 15px;">
-
-                    <a
-                        href="#"
-                        onclick="hideSellerForgotPassword(); return false;">
-
-                        ← Back to Seller Login
-
-                    </a>
-
-                </p>
-
+            <div class="switch-text">
+                New seller? <a onclick="toggleForm('register')">Register here</a>
             </div>
+        </div>
 
-        </section>
+        <!-- SELLER REGISTRATION FORM -->
+        <div id="registerSection" class="hidden">
+            <h2>New Seller Registration</h2>
 
-    </main>
+            <form id="sellerRegisterForm" onsubmit="handleSellerRegister(event)">
 
+                <div class="form-group">
+                    <label for="regName">Seller Name</label>
+                    <input type="text" id="regName" required placeholder="Enter your name or store name">
+                </div>
 
-    <footer class="seller-footer">
+                <div class="form-group">
+                    <label for="regEmail">Seller email</label>
+                    <input type="email" id="regEmail" required placeholder="seller@rogasree.com">
+                </div>
 
-        <strong>
-            ROGASREE MART
-        </strong>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" required placeholder="********">
+                </div>
 
-        <span>
-            Seller Centre · © 2026
-        </span>
+                <button type="submit" class="login-btn">Register & Login</button>
 
-    </footer>
+            </form>
 
+            <div class="switch-text">
+                Already have an account? <a onclick="toggleForm('login')">Login here</a>
+            </div>
+        </div>
+
+        <a href="home.html" class="back-link">Return to main page</a>
+    </div>
 
     <script>
 
-        // IMPORTANT: Intha URL-ku badhila ungaloda Railway Backend URL-a podunga!
-        const API_BASE_URL = "rogasreemart-production.up.railway.app";
+        // Toggle between Login and Register views
+        function toggleForm(formType) {
+            const loginSec = document.getElementById("loginSection");
+            const regSec = document.getElementById("registerSection");
 
-        /* =========================
-            SHOW / HIDE PASSWORD
-        ========================= */
-
-        const sellerPassword =
-            document.getElementById("sellerPassword");
-
-        const sellerToggle =
-            document.getElementById("sellerTogglePassword");
-
-
-        sellerToggle.addEventListener("click", function () {
-
-            if (sellerPassword.type === "password") {
-
-                sellerPassword.type = "text";
-
-                sellerToggle.textContent = "Hide";
-
+            if (formType === 'register') {
+                loginSec.classList.add("hidden");
+                regSec.classList.remove("hidden");
             } else {
-
-                sellerPassword.type = "password";
-
-                sellerToggle.textContent = "Show";
-
+                regSec.classList.add("hidden");
+                loginSec.classList.remove("hidden");
             }
-
-        });
-
-
-        /* =========================
-            SELLER LOGIN
-        ========================= */
-
-        const sellerForm =
-            document.getElementById("sellerLoginForm");
-
-
-        sellerForm.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
-
-
-                const email =
-                    document.getElementById("sellerEmail")
-                    .value
-                    .trim();
-
-
-                const password =
-                    document.getElementById("sellerPassword")
-                    .value
-                    .trim();
-
-
-                const emailError =
-                    document.getElementById(
-                        "sellerEmailError"
-                    );
-
-
-                const passwordError =
-                    document.getElementById(
-                        "sellerPasswordError"
-                    );
-
-
-                emailError.textContent = "";
-
-                passwordError.textContent = "";
-
-
-                if (email === "") {
-
-                    emailError.textContent =
-                        "Please enter your seller email.";
-
-                    return;
-                }
-
-
-                if (!email.includes("@")) {
-
-                    emailError.textContent =
-                        "Please enter a valid email address.";
-
-                    return;
-                }
-
-
-                if (password === "") {
-
-                    passwordError.textContent =
-                        "Please enter your password.";
-
-                    return;
-                }
-
-
-                if (password.length < 6) {
-
-                    passwordError.textContent =
-                        "Password must contain at least 6 characters.";
-
-                    return;
-                }
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            API_BASE_URL + "/seller/login",
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body: JSON.stringify({
-
-                                    email: email,
-
-                                    password: password
-
-                                })
-                            }
-                        );
-
-
-                    if (!response.ok) {
-
-                        throw new Error(
-                            "Seller login failed"
-                        );
-
-                    }
-
-
-                    const seller =
-                        await response.json();
-
-
-                    if (!seller || !seller.id) {
-
-                        passwordError.textContent =
-                            "Invalid seller email or password.";
-
-                        return;
-                    }
-
-
-                    localStorage.setItem(
-                        "sellerId",
-                        seller.id
-                    );
-
-
-                    localStorage.setItem(
-                        "sellerName",
-                        seller.name
-                    );
-
-
-                    localStorage.setItem(
-                        "sellerEmail",
-                        seller.email
-                    );
-
-
-                    alert(
-                        "Seller login successful!"
-                    );
-
-
-                    window.location.href =
-                        "seller-dashboard.html";
-
-
-                } catch (error) {
-
-                    console.error(error);
-
-                    alert(
-                        "Backend connection failed. " +
-                        "Please check your Spring Boot deployment."
-                    );
-
-                }
-
-            }
-        );
-
-
-        /* =========================
-            SHOW FORGOT PASSWORD
-        ========================= */
-
-        function showSellerForgotPassword() {
-
-            document
-                .getElementById(
-                    "sellerForgotPasswordSection"
-                )
-                .style.display = "block";
-
         }
 
+        // Handle Seller Login
+        async function handleSellerLogin(event) {
+            event.preventDefault();
 
-        /* =========================
-            HIDE FORGOT PASSWORD
-        ========================= */
-
-        function hideSellerForgotPassword() {
-
-            document
-                .getElementById(
-                    "sellerForgotPasswordSection"
-                )
-                .style.display = "none";
-
-        }
-
-
-        /* =========================
-            SELLER RESET PASSWORD
-        ========================= */
-
-        async function resetSellerPassword() {
-
-            const email =
-                document
-                    .getElementById(
-                        "sellerForgotEmail"
-                    )
-                    .value
-                    .trim();
-
-
-            const newPassword =
-                document
-                    .getElementById(
-                        "sellerNewPassword"
-                    )
-                    .value;
-
-
-            const resetButton =
-                document.getElementById(
-                    "sellerResetPasswordButton"
-                );
-
-
-            const message =
-                document.getElementById(
-                    "sellerForgotMessage"
-                );
-
-
-            if (!email || !newPassword) {
-
-                message.textContent =
-                    "Please enter email and new password.";
-
-                message.style.color =
-                    "red";
-
-                return;
-
-            }
-
-
-            if (newPassword.length < 6) {
-
-                message.textContent =
-                    "Password must contain at least 6 characters.";
-
-                message.style.color =
-                    "red";
-
-                return;
-
-            }
-
-
-            resetButton.disabled = true;
-
-            resetButton.innerHTML =
-                "Updating...";
-
+            const email = document.getElementById("sellerEmail").value.trim();
+            const password = document.getElementById("sellerPassword").value.trim();
 
             try {
+                const response = await fetch("/seller/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
 
-                const response =
-                    await fetch(
-                        API_BASE_URL + "/seller/forgot-password",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-
-                                email: email,
-
-                                newPassword: newPassword
-
-                            })
-                        }
-                    );
-
-
-                const result =
-                    await response.text();
-
-
-                if (
-                    result ===
-                    "Password updated successfully"
-                ) {
-
-                    message.textContent =
-                        "Password updated successfully!";
-
-                    message.style.color =
-                        "green";
-
-
-                    document
-                        .getElementById(
-                            "sellerForgotEmail"
-                        )
-                        .value = "";
-
-
-                    document
-                        .getElementById(
-                            "sellerNewPassword"
-                        )
-                        .value = "";
-
-
-                } else {
-
-                    message.textContent =
-                        result;
-
-                    message.style.color =
-                        "red";
-
+                if (!response.ok) {
+                    throw new Error("Invalid email or password");
                 }
 
+                const data = await response.json();
+                
+                localStorage.setItem("loggedInSellerId", data.id);
+                localStorage.setItem("loggedInSellerEmail", email);
+
+                alert("Login successful!");
+                window.location.href = "seller-dashboard.html";
 
             } catch (error) {
-
                 console.error(error);
-
-
-                message.textContent =
-                    "Backend connection failed. Please check your deployment.";
-
-                message.style.color =
-                    "red";
-
-            } finally {
-
-                resetButton.disabled = false;
-
-                resetButton.innerHTML =
-                    "Reset Password <span>→</span>";
-
+                alert("Backend connection failed or invalid credentials. Please check your Spring Boot deployment.");
             }
+        }
 
+        // Handle New Seller Registration
+        async function handleSellerRegister(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("regName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const password = document.getElementById("regPassword").value.trim();
+
+            try {
+                const response = await fetch("/seller/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Registration failed");
+                }
+
+                const data = await response.json();
+
+                // Automatically save session and move to dashboard or login
+                localStorage.setItem("loggedInSellerId", data.id);
+                localStorage.setItem("loggedInSellerEmail", email);
+
+                alert("Registration successful! Welcome to Seller Centre.");
+                window.location.href = "seller-dashboard.html";
+
+            } catch (error) {
+                console.error(error);
+                alert("Registration failed. Email might already be registered or backend issue.");
+            }
         }
 
     </script>
