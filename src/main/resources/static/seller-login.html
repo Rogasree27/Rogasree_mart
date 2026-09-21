@@ -330,8 +330,11 @@
 
     <script>
 
+        // IMPORTANT: Intha URL-ku badhila ungaloda Railway Backend URL-a podunga!
+        const API_BASE_URL = "https://ungal-backend-url.up.railway.app";
+
         /* =========================
-           SHOW / HIDE PASSWORD
+            SHOW / HIDE PASSWORD
         ========================= */
 
         const sellerPassword =
@@ -361,7 +364,7 @@
 
 
         /* =========================
-           SELLER LOGIN
+            SELLER LOGIN
         ========================= */
 
         const sellerForm =
@@ -444,7 +447,7 @@
 
                     const response =
                         await fetch(
-                            "http://localhost:8080/seller/login",
+                            API_BASE_URL + "/seller/login",
                             {
                                 method: "POST",
 
@@ -519,7 +522,7 @@
 
                     alert(
                         "Backend connection failed. " +
-                        "Please start Spring Boot."
+                        "Please check your Spring Boot deployment."
                     );
 
                 }
@@ -529,7 +532,7 @@
 
 
         /* =========================
-           SHOW FORGOT PASSWORD
+            SHOW FORGOT PASSWORD
         ========================= */
 
         function showSellerForgotPassword() {
@@ -544,7 +547,7 @@
 
 
         /* =========================
-           HIDE FORGOT PASSWORD
+            HIDE FORGOT PASSWORD
         ========================= */
 
         function hideSellerForgotPassword() {
@@ -559,7 +562,7 @@
 
 
         /* =========================
-           SELLER RESET PASSWORD
+            SELLER RESET PASSWORD
         ========================= */
 
         async function resetSellerPassword() {
@@ -629,7 +632,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:8080/seller/forgot-password",
+                        API_BASE_URL + "/seller/forgot-password",
                         {
                             method: "POST",
 
@@ -696,7 +699,7 @@
 
 
                 message.textContent =
-                    "Backend connection failed. Please start Spring Boot.";
+                    "Backend connection failed. Please check your deployment.";
 
                 message.style.color =
                     "red";
