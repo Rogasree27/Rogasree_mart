@@ -304,7 +304,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:8080/cart",
+                        "/cart",
                         {
                             method: "POST",
 
@@ -375,7 +375,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:8080/wishlist",
+                        "/wishlist",
                         {
                             method: "POST",
 
@@ -441,7 +441,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:8080/orders/" +
+                        "/orders/" +
                         Number(userId)
                     );
 
@@ -529,7 +529,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:8080/products"
+                        "/products"
                     );
 
 
@@ -584,7 +584,7 @@
             }
 
 
-            // Parallel reviews fetch for optimized speed without breaking logic
+            // Parallel reviews fetch
             const productReviewsMap = {};
 
             await Promise.all(
@@ -594,7 +594,7 @@
 
                         const reviewResponse =
                             await fetch(
-                                "http://localhost:8080/reviews/product/" +
+                                "/reviews/product/" +
                                 product.id
                             );
 
@@ -676,11 +676,8 @@
                 }
 
 
-                // Get reviews from map
                 let reviews = productReviewsMap[product.id] || [];
 
-
-                // Calculate rating
 
                 let averageRating = 0;
 
@@ -707,10 +704,6 @@
 
                 let reviewHTML = "";
 
-
-                // =========================
-                // REVIEWS DISPLAY
-                // =========================
 
                 if (reviews.length > 0) {
 
@@ -763,10 +756,6 @@
                 }
 
 
-
-                // =========================
-                // REVIEW FORM
-                // =========================
 
                 if (
                     deliveredProductIds.includes(
@@ -888,10 +877,6 @@
                 }
 
 
-
-                // =========================
-                // PRODUCT CARD
-                // =========================
 
                 productCard.innerHTML = `
 
@@ -1027,11 +1012,9 @@
 
             try {
 
-                // Check existing reviews again
-
                 const checkResponse =
                     await fetch(
-                        "http://localhost:8080/reviews/product/" +
+                        "/reviews/product/" +
                         productId
                     );
 
@@ -1064,12 +1047,9 @@
                 }
 
 
-
-                // Submit review
-
                 const response =
                     await fetch(
-                        "http://localhost:8080/reviews",
+                        "/reviews",
                         {
                             method: "POST",
 
@@ -1110,8 +1090,6 @@
                     "Review submitted successfully!"
                 );
 
-
-                // Reload products
 
                 await loadProducts();
 
