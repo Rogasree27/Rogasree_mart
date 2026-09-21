@@ -192,6 +192,9 @@
 
     <script>
 
+        // API Base URL (Railway-kku blank "" potta, atuve current live domain-oda connect aagum)
+        const API_BASE_URL = "";
+
 
         /* =========================
            LOGIN
@@ -247,7 +250,7 @@
 
                         const response =
                             await fetch(
-                                "http://localhost:8080/login",
+                                API_BASE_URL + "/login",
                                 {
                                     method: "POST",
 
@@ -480,7 +483,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:8080/forgot-password",
+                        API_BASE_URL + "/forgot-password",
                         {
                             method: "POST",
 
