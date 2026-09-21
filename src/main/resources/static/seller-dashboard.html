@@ -356,638 +356,222 @@
 
 
 <script>
+    /* =========================
+       DYNAMIC API URL CONFIG
+       ========================= */
+    const BASE_URL = "https://rogasreemart-production.up.railway.app";
 
     /* =========================
        SELLER LOGIN CHECK
        ========================= */
-
-    const sellerName =
-        localStorage.getItem("sellerName");
-
+    const sellerName = localStorage.getItem("sellerName");
     if (sellerName) {
-        document.getElementById("sellerName").textContent =
-            sellerName;
+        document.getElementById("sellerName").textContent = sellerName;
     }
-
 
     /* =========================
        IMAGE PREVIEW
        ========================= */
-
-    document
-        .getElementById("productImage")
-        .addEventListener("change", function(event) {
-
-            const file = event.target.files[0];
-
-            if (!file) {
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-
-                const preview =
-                    document.getElementById("imagePreview");
-
-                preview.src = e.target.result;
-
-                preview.style.display = "block";
-            };
-
-            reader.readAsDataURL(file);
-        });
-
+    document.getElementById("productImage").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById("imagePreview");
+            preview.src = e.target.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    });
 
     /* =========================
        ADD PRODUCT
        ========================= */
+    document.getElementById("productForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const name = document.getElementById("productName").value;
+        const price = document.getElementById("productPrice").value;
+        const description = document.getElementById("productDescription").value;
+        const imageFile = document.getElementById("productImage").files[0];
 
-    document
-        .getElementById("productForm")
-        .addEventListener("submit", async function(event) {
+        if (!imageFile) {
+            alert("Please select an image.");
+            return;
+        }
 
-            event.preventDefault();
-
-            const name =
-                document.getElementById("productName").value;
-
-            const price =
-                document.getElementById("productPrice").value;
-
-            const description =
-                document.getElementById("productDescription").value;
-
-            const imageFile =
-                document.getElementById("productImage").files[0];
-
-
-            if (!imageFile) {
-
-                alert("Please select an image.");
-
-                return;
-            }
-
-
-            const reader = new FileReader();
-
-
-            reader.onload = async function() {
-
-                const product = {
-
-                    name: name,
-
-                    price: parseFloat(price),
-
-                    description: description,
-
-                    image: reader.result
-                };
-
-
-                try {
-
-                    const response = await fetch(
-                        "http://localhost:8080/products",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify(product)
-                        }
-                    );
-
-
-                    if (!response.ok) {
-
-                        throw new Error(
-                            "Unable to add product"
-                        );
-                    }
-
-
-                    alert("Product added successfully!");
-
-
-                    document
-                        .getElementById("productForm")
-                        .reset();
-
-
-                    document
-                        .getElementById("imagePreview")
-                        .style.display = "none";
-
-
-                    loadProducts();
-
-                }
-
-                catch (error) {
-
-                    console.error(error);
-
-                    alert(
-                        "Unable to add product."
-                    );
-                }
-
+        const reader = new FileReader();
+        reader.onload = async function() {
+            const product = {
+                name: name,
+                price: parseFloat(price),
+                description: description,
+                image: reader.result
             };
 
+            try {
+                const response = await fetch(BASE_URL + "/products", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(product)
+                });
 
-            reader.readAsDataURL(imageFile);
+                if (!response.ok) throw new Error("Unable to add product");
 
-        });
-
+                alert("Product added successfully!");
+                document.getElementById("productForm").reset();
+                document.getElementById("imagePreview").style.display = "none";
+                loadProducts();
+            } catch (error) {
+                console.error(error);
+                alert("Unable to add product.");
+            }
+        };
+        reader.readAsDataURL(imageFile);
+    });
 
     /* =========================
        LOAD PRODUCTS
        ========================= */
-
     async function loadProducts() {
-
         try {
+            const response = await fetch(BASE_URL + "/products");
+            if (!response.ok) throw new Error("Unable to load products");
 
-            const response = await fetch(
-                "http://localhost:8080/products"
-            );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Unable to load products"
-                );
-            }
-
-
-            const products =
-                await response.json();
-
-
-            const productsDiv =
-                document.getElementById("products");
-
-
+            const products = await response.json();
+            const productsDiv = document.getElementById("products");
             productsDiv.innerHTML = "";
 
-
             if (products.length === 0) {
-
-                productsDiv.innerHTML =
-                    "<p>No products available.</p>";
-
+                productsDiv.innerHTML = "<p>No products available.</p>";
                 return;
             }
 
-
             products.forEach(function(product) {
+                const productDiv = document.createElement("div");
+                productDiv.className = "product-card";
 
-                const productDiv =
-                    document.createElement("div");
+                let imageHTML = product.image ? "<img src='" + product.image + "' alt='Product Image'>" : "<p>No image</p>";
 
+                productDiv.innerHTML = imageHTML +
+                    "<h3>" + product.name + "</h3>" +
+                    "<p class='price'>₹" + product.price + "</p>" +
+                    "<p>" + product.description + "</p>" +
+                    "<button class='remove-btn' onclick='removeProduct(" + product.id + ")'>Remove Product</button>";
 
-                productDiv.className =
-                    "product-card";
-
-
-                let imageHTML = "";
-
-
-                if (product.image) {
-
-                    imageHTML =
-                        "<img src='" +
-                        product.image +
-                        "' alt='Product Image'>";
-
-                } else {
-
-                    imageHTML =
-                        "<p>No image</p>";
-                }
-
-
-                productDiv.innerHTML =
-
-                    imageHTML +
-
-                    "<h3>" +
-                    product.name +
-                    "</h3>" +
-
-                    "<p class='price'>₹" +
-                    product.price +
-                    "</p>" +
-
-                    "<p>" +
-                    product.description +
-                    "</p>" +
-
-                    "<button class='remove-btn' " +
-                    "onclick='removeProduct(" +
-                    product.id +
-                    ")'>" +
-                    "Remove Product" +
-                    "</button>";
-
-
-                productsDiv.appendChild(
-                    productDiv
-                );
-
+                productsDiv.appendChild(productDiv);
             });
-
-        }
-
-        catch (error) {
-
+        } catch (error) {
             console.error(error);
-
-            document.getElementById("products").innerHTML =
-                "<p class='error'>" +
-                "Unable to load products." +
-                "</p>";
+            document.getElementById("products").innerHTML = "<p class='error'>Unable to load products.</p>";
         }
-
     }
-
 
     /* =========================
        REMOVE PRODUCT
        ========================= */
-
     async function removeProduct(productId) {
-
-        const confirmDelete =
-            confirm(
-                "Are you sure you want to remove this product?"
-            );
-
-
-        if (!confirmDelete) {
-            return;
-        }
-
+        if (!confirm("Are you sure you want to remove this product?")) return;
 
         try {
+            const response = await fetch(BASE_URL + "/products/" + productId, { method: "DELETE" });
+            if (!response.ok) throw new Error("Unable to remove product");
 
-            const response = await fetch(
-                "http://localhost:8080/products/" +
-                productId,
-                {
-                    method: "DELETE"
-                }
-            );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Unable to remove product"
-                );
-            }
-
-
-            alert(
-                "Product removed successfully!"
-            );
-
-
+            alert("Product removed successfully!");
             loadProducts();
-
-        }
-
-        catch (error) {
-
+        } catch (error) {
             console.error(error);
-
-            alert(
-                "Unable to remove product."
-            );
+            alert("Unable to remove product.");
         }
-
     }
-
 
     /* =========================
        LOAD CUSTOMER ORDERS
        ========================= */
-
     async function loadOrders() {
-
         try {
+            const response = await fetch(BASE_URL + "/orders/all");
+            if (!response.ok) throw new Error("Unable to load orders");
 
-            const response = await fetch(
-                "http://localhost:8080/orders/all"
-            );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Unable to load orders"
-                );
-            }
-
-
-            const orders =
-                await response.json();
-
-
-            const ordersDiv =
-                document.getElementById("orders");
-
-
+            const orders = await response.json();
+            const ordersDiv = document.getElementById("orders");
             ordersDiv.innerHTML = "";
 
-
             if (orders.length === 0) {
-
-                ordersDiv.innerHTML =
-                    "<p>No customer orders found.</p>";
-
+                ordersDiv.innerHTML = "<p>No customer orders found.</p>";
                 return;
             }
 
-
             orders.forEach(function(order) {
+                const orderDiv = document.createElement("div");
+                orderDiv.className = "order-card";
 
-                const orderDiv =
-                    document.createElement("div");
-
-
-                orderDiv.className =
-                    "order-card";
-
-
-                /*
-                    IMPORTANT:
-
-                    Existing orders have status:
-                    PLACED
-
-                    New workflow:
-                    PLACED/Pending
-                    ↓
-                    Confirmed
-                    ↓
-                    Shipped
-                    ↓
-                    Delivered
-                */
-
-
-                const status =
-                    order.status || "Pending";
-
-
+                const status = order.status || "Pending";
                 let nextButton = "";
 
-
-                if (
-                    status === "PLACED" ||
-                    status === "Pending"
-                ) {
-
-                    nextButton =
-
-                        "<button " +
-                        "class='status-button' " +
-                        "onclick='updateOrderStatus(" +
-                        order.id +
-                        ", \"Confirmed\")'>" +
-
-                        "Confirm Order" +
-
-                        "</button>";
-
+                if (status === "PLACED" || status === "Pending") {
+                    nextButton = "<button class='status-button' onclick='updateOrderStatus(" + order.id + ", \"Confirmed\")'>Confirm Order</button>";
+                } else if (status === "Confirmed") {
+                    nextButton = "<button class='status-button' onclick='updateOrderStatus(" + order.id + ", \"Shipped\")'>Mark as Shipped</button>";
+                } else if (status === "Shipped") {
+                    nextButton = "<button class='status-button' onclick='updateOrderStatus(" + order.id + ", \"Delivered\")'>Mark as Delivered</button>";
+                } else if (status === "Delivered") {
+                    nextButton = "<p class='completed'>Order completed.</p>";
+                } else {
+                    nextButton = "<button class='status-button' onclick='updateOrderStatus(" + order.id + ", \"Confirmed\")'>Confirm Order</button>";
                 }
 
+                let statusClass = status.toLowerCase();
 
-                else if (
-                    status === "Confirmed"
-                ) {
-
-                    nextButton =
-
-                        "<button " +
-                        "class='status-button' " +
-                        "onclick='updateOrderStatus(" +
-                        order.id +
-                        ", \"Shipped\")'>" +
-
-                        "Mark as Shipped" +
-
-                        "</button>";
-
-                }
-
-
-                else if (
-                    status === "Shipped"
-                ) {
-
-                    nextButton =
-
-                        "<button " +
-                        "class='status-button' " +
-                        "onclick='updateOrderStatus(" +
-                        order.id +
-                        ", \"Delivered\")'>" +
-
-                        "Mark as Delivered" +
-
-                        "</button>";
-
-                }
-
-
-                else if (
-                    status === "Delivered"
-                ) {
-
-                    nextButton =
-                        "<p class='completed'>" +
-                        "Order completed." +
-                        "</p>";
-
-                }
-
-
-                else {
-
-                    nextButton =
-
-                        "<button " +
-                        "class='status-button' " +
-                        "onclick='updateOrderStatus(" +
-                        order.id +
-                        ", \"Confirmed\")'>" +
-
-                        "Confirm Order" +
-
-                        "</button>";
-
-                }
-
-
-                let statusClass =
-                    status.toLowerCase();
-
-
-                orderDiv.innerHTML =
-
-                    "<h3>Order #" +
-                    order.id +
-                    "</h3>" +
-
-                    "<p>" +
-                    "<b>Customer ID:</b> " +
-                    order.userId +
-                    "</p>" +
-
-                    "<p>" +
-                    "<b>Total Amount:</b> ₹" +
-                    order.totalAmount +
-                    "</p>" +
-
-                    "<p>" +
-                    "<b>Status:</b>" +
-                    "</p>" +
-
-                    "<span class='status " +
-                    statusClass +
-                    "'>" +
-
-                    status +
-
-                    "</span>" +
-
-                    "<br>" +
-
+                orderDiv.innerHTML = "<h3>Order #" + order.id + "</h3>" +
+                    "<p><b>Customer ID:</b> " + order.userId + "</p>" +
+                    "<p><b>Total Amount:</b> ₹" + order.totalAmount + "</p>" +
+                    "<p><b>Status:</b></p>" +
+                    "<span class='status " + statusClass + "'>" + status + "</span><br>" +
                     nextButton;
 
-
-                ordersDiv.appendChild(
-                    orderDiv
-                );
-
+                ordersDiv.appendChild(orderDiv);
             });
-
-        }
-
-        catch (error) {
-
+        } catch (error) {
             console.error(error);
-
-            document.getElementById("orders").innerHTML =
-
-                "<p class='error'>" +
-                "Unable to load customer orders." +
-                "</p>";
+            document.getElementById("orders").innerHTML = "<p class='error'>Unable to load customer orders.</p>";
         }
-
     }
-
 
     /* =========================
        UPDATE ORDER STATUS
        ========================= */
-
-    async function updateOrderStatus(
-        orderId,
-        newStatus
-    ) {
-
+    async function updateOrderStatus(orderId, newStatus) {
         try {
+            const response = await fetch(BASE_URL + "/orders/" + orderId + "/status", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: newStatus })
+            });
 
-            const response = await fetch(
+            if (!response.ok) throw new Error("Unable to update status");
 
-                "http://localhost:8080/orders/" +
-                orderId +
-                "/status",
-
-                {
-                    method: "PUT",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        status: newStatus
-                    })
-                }
-            );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Unable to update status"
-                );
-            }
-
-
-            alert(
-                "Order status changed to " +
-                newStatus
-            );
-
-
+            alert("Order status changed to " + newStatus);
             loadOrders();
-
-        }
-
-        catch (error) {
-
+        } catch (error) {
             console.error(error);
-
-            alert(
-                "Unable to update order status."
-            );
+            alert("Unable to update order status.");
         }
-
     }
-
 
     /* =========================
        LOGOUT
        ========================= */
-
     function logout() {
-
-        localStorage.removeItem(
-            "sellerName"
-        );
-
-        localStorage.removeItem(
-            "sellerId"
-        );
-
-        window.location.href =
-            "login.html";
+        localStorage.removeItem("sellerName");
+        localStorage.removeItem("sellerId");
+        window.location.href = "login.html";
     }
-
 
     /* =========================
        PAGE LOAD
        ========================= */
-
     loadProducts();
-
     loadOrders();
-
 </script>
-
 </body>
 </html>
