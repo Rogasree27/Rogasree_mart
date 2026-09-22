@@ -48,83 +48,48 @@
 
 
     <script>
+        // Dynamic API Base URL for Railway compatibility
+        const API_BASE_URL = window.location.hostname === "localhost" 
+            ? "http://localhost:8080" 
+            : "https://rogasreemart-production.up.railway.app";
 
-        const userId =
-            localStorage.getItem("loggedInUserId");
+        const userId = localStorage.getItem("loggedInUserId");
 
-        const cartItems =
-            document.getElementById("cartItems");
-
-        const totalItems =
-            document.getElementById("totalItems");
-
-        const subtotal =
-            document.getElementById("subtotal");
-
-        const delivery =
-            document.getElementById("delivery");
-
-        const grandTotal =
-            document.getElementById("grandTotal");
+        const cartItems = document.getElementById("cartItems");
+        const totalItems = document.getElementById("totalItems");
+        const subtotal = document.getElementById("subtotal");
+        const delivery = document.getElementById("delivery");
+        const grandTotal = document.getElementById("grandTotal");
 
 
         async function displayCart() {
 
             if (!userId) {
-
-                cartItems.innerHTML =
-                    "<p>Please login first.</p>";
-
+                cartItems.innerHTML = "<p>Please login first.</p>";
                 return;
             }
 
-
             try {
-
-                const cartResponse =
-                    await fetch(
-                        "http://localhost:8080/cart/" +
-                        userId
-                    );
-
+                const cartResponse = await fetch(API_BASE_URL + "/cart/" + userId);
 
                 if (!cartResponse.ok) {
-
-                    throw new Error(
-                        "Unable to load cart"
-                    );
+                    throw new Error("Unable to load cart");
                 }
 
+                const cart = await cartResponse.json();
 
-                const cart =
-                    await cartResponse.json();
-
-
-                const productResponse =
-                    await fetch(
-                        "http://localhost:8080/products"
-                    );
-
+                const productResponse = await fetch(API_BASE_URL + "/products");
 
                 if (!productResponse.ok) {
-
-                    throw new Error(
-                        "Unable to load products"
-                    );
+                    throw new Error("Unable to load products");
                 }
 
-
-                const products =
-                    await productResponse.json();
-
+                const products = await productResponse.json();
 
                 cartItems.innerHTML = "";
 
-
                 if (cart.length === 0) {
-
-                    cartItems.innerHTML =
-                        "<p>Your cart is empty.</p>";
+                    cartItems.innerHTML = "<p>Your cart is empty.</p>";
 
                     totalItems.textContent = "0";
                     subtotal.textContent = "0";
@@ -134,147 +99,78 @@
                     return;
                 }
 
-
                 let totalQuantity = 0;
                 let totalPrice = 0;
 
-
                 cart.forEach(function(item) {
 
-                    const product =
-                        products.find(function(product) {
-
-                            return product.id ===
-                                item.productId;
-
-                        });
-
+                    const product = products.find(function(product) {
+                        return product.id === item.productId;
+                    });
 
                     if (!product) {
                         return;
                     }
 
+                    const itemTotal = product.price * item.quantity;
 
-                    const itemTotal =
-                        product.price *
-                        item.quantity;
+                    totalQuantity += item.quantity;
+                    totalPrice += itemTotal;
 
-
-                    totalQuantity +=
-                        item.quantity;
-
-                    totalPrice +=
-                        itemTotal;
-
-
-                    const itemDiv =
-                        document.createElement("div");
-
+                    const itemDiv = document.createElement("div");
 
                     itemDiv.innerHTML =
-
-                        "<h3>" +
-                        product.name +
-                        "</h3>" +
-
-                        "<p>Price: ₹" +
-                        product.price +
-                        "</p>" +
-
-                        "<p>Quantity: " +
-                        item.quantity +
-                        "</p>" +
-
-                        "<p>Item Total: ₹" +
-                        itemTotal +
-                        "</p>" +
-
-                        "<button type='button' " +
-                        "onclick='removeFromCart(" +
-                        item.id +
-                        ")'>" +
+                        "<h3>" + product.name + "</h3>" +
+                        "<p>Price: ₹" + product.price + "</p>" +
+                        "<p>Quantity: " + item.quantity + "</p>" +
+                        "<p>Item Total: ₹" + itemTotal + "</p>" +
+                        "<button type='button' onclick='removeFromCart(" + item.id + ")'>" +
                         "Remove" +
                         "</button>" +
-
                         "<hr>";
-
 
                     cartItems.appendChild(itemDiv);
 
                 });
 
-
-                totalItems.textContent =
-                    totalQuantity;
-
-                subtotal.textContent =
-                    totalPrice;
-
-                delivery.textContent =
-                    totalPrice > 0 ? 0 : 0;
-
-                grandTotal.textContent =
-                    totalPrice;
-
+                totalItems.textContent = totalQuantity;
+                subtotal.textContent = totalPrice;
+                delivery.textContent = 0;
+                grandTotal.textContent = totalPrice;
 
             } catch (error) {
-
                 console.error(error);
-
-                cartItems.innerHTML =
-                    "<p>Unable to load cart from server.</p>";
+                cartItems.innerHTML = "<p>Unable to load cart from server.</p>";
             }
         }
 
 
         async function removeFromCart(cartId) {
-
             try {
-
-                const response =
-                    await fetch(
-                        "http://localhost:8080/cart/" +
-                        cartId,
-                        {
-                            method: "DELETE"
-                        }
-                    );
-
+                const response = await fetch(API_BASE_URL + "/cart/" + cartId, {
+                    method: "DELETE"
+                });
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Unable to remove item"
-                    );
+                    throw new Error("Unable to remove item");
                 }
 
-
-                alert(
-                    "Item removed from cart!"
-                );
-
-
+                alert("Item removed from cart!");
                 displayCart();
 
-
             } catch (error) {
-
                 console.error(error);
-
-                alert(
-                    "Unable to remove item."
-                );
+                alert("Unable to remove item.");
             }
         }
 
 
-        function placeOrder(){
-            window.location.href ="checkout.html";
+        function placeOrder() {
+            window.location.href = "checkout.html";
         }
 
 
         displayCart();
-
     </script>
 
 </body>
