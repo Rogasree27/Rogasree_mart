@@ -307,6 +307,13 @@
 
 
 
+    <script>
+        // Determine API base URL dynamically for Railway deployment compatibility
+        const API_BASE_URL = window.location.hostname === "localhost" 
+            ? "http://localhost:8080" 
+            : "https://rogasreemart-production.up.railway.app";
+    </script>
+    
     <script src="script.js"></script>
 
 
