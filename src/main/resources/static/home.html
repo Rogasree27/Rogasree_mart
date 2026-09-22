@@ -2,17 +2,11 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Home | ROGASREE MART</title>
-
     <link rel="stylesheet" href="style.css">
-
     <style>
-
         .search-box {
             margin: 20px 0;
             text-align: center;
@@ -135,1002 +129,434 @@
             font-weight: bold;
             margin: 10px 0;
         }
-
     </style>
-
 </head>
-
 
 <body>
 
-
     <header>
-
         <h1>ROGASREE MART</h1>
-
         <nav>
-
-            <a href="home.html">
-                Home
-            </a>
-
-            <a href="cart.html">
-                Cart
-            </a>
-
-            <a href="wishlist.html">
-                Wishlist
-            </a>
-
-            <button
-                type="button"
-                onclick="logout()">
-
-                Logout
-
-            </button>
-
+            <a href="home.html">Home</a>
+            <a href="cart.html">Cart</a>
+            <a href="wishlist.html">Wishlist</a>
+            <button type="button" onclick="logout()">Logout</button>
         </nav>
-
     </header>
 
-
     <main>
-
         <h2>Our Products</h2>
 
-
         <div class="search-box">
-
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search products..."
-                oninput="searchProducts()">
-
+            <input type="text" id="searchInput" placeholder="Search products..." oninput="searchProducts()">
         </div>
-
 
         <div id="productGrid">
-
             <p>Loading products...</p>
-
         </div>
-
     </main>
 
-
     <script>
+        // Dynamic API Base URL (Automatically switches between Local and Railway production)
+        const API_BASE_URL = window.location.hostname === "localhost" 
+            ? "http://localhost:8080" 
+            : "https://rogasreemart-production.up.railway.app";
 
-
-        const userId =
-            localStorage.getItem("loggedInUserId");
-
-
+        const userId = localStorage.getItem("loggedInUserId");
         let allProducts = [];
-
         let deliveredProductIds = [];
-
 
         // =========================
         // LOGOUT
         // =========================
-
         function logout() {
-
-            localStorage.removeItem(
-                "loggedInUserId"
-            );
-
-            localStorage.removeItem(
-                "loggedInUserName"
-            );
-
-            localStorage.removeItem(
-                "loggedInUserEmail"
-            );
-
+            localStorage.removeItem("loggedInUserId");
+            localStorage.removeItem("loggedInUserName");
+            localStorage.removeItem("loggedInUserEmail");
             alert("Logged out successfully!");
-
-            window.location.href =
-                "login.html";
+            window.location.href = "login.html";
         }
-
-
 
         // =========================
         // ADD TO CART
         // =========================
-
         async function addToCart(productId) {
-
             if (!userId) {
-
                 alert("Please login first.");
-
-                window.location.href =
-                    "login.html";
-
+                window.location.href = "login.html";
                 return;
             }
 
-
             try {
-
-                const response =
-                    await fetch(
-                        "http://localhost:8080/cart",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-
-                                userId:
-                                    Number(userId),
-
-                                productId:
-                                    Number(productId),
-
-                                quantity: 1
-
-                            })
-                        }
-                    );
-
+                const response = await fetch(`${API_BASE_URL}/cart`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId: Number(userId),
+                        productId: Number(productId),
+                        quantity: 1
+                    })
+                });
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Unable to add to cart"
-                    );
-
+                    throw new Error("Unable to add to cart");
                 }
 
-
-                alert(
-                    "Product added to cart!"
-                );
-
+                alert("Product added to cart!");
 
             } catch (error) {
-
                 console.error(error);
-
-                alert(
-                    "Unable to add product to cart."
-                );
+                alert("Unable to add product to cart.");
             }
         }
-
-
 
         // =========================
         // ADD TO WISHLIST
         // =========================
-
         async function addToWishlist(productId) {
-
             if (!userId) {
-
                 alert("Please login first.");
-
-                window.location.href =
-                    "login.html";
-
+                window.location.href = "login.html";
                 return;
             }
 
-
             try {
-
-                const response =
-                    await fetch(
-                        "http://localhost:8080/wishlist",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-
-                                userId:
-                                    Number(userId),
-
-                                productId:
-                                    Number(productId)
-
-                            })
-                        }
-                    );
-
+                const response = await fetch(`${API_BASE_URL}/wishlist`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId: Number(userId),
+                        productId: Number(productId)
+                    })
+                });
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Unable to add to wishlist"
-                    );
-
+                    throw new Error("Unable to add to wishlist");
                 }
 
-
-                alert(
-                    "Product added to wishlist!"
-                );
-
+                alert("Product added to wishlist!");
 
             } catch (error) {
-
                 console.error(error);
-
-                alert(
-                    "Unable to add product to wishlist."
-                );
+                alert("Unable to add product to wishlist.");
             }
         }
-
-
 
         // =========================
         // LOAD DELIVERED PRODUCTS
         // =========================
-
         async function loadDeliveredProducts() {
-
             if (!userId) {
-
                 deliveredProductIds = [];
-
                 return;
             }
 
-
             try {
-
-                const response =
-                    await fetch(
-                        "http://localhost:8080/orders/" +
-                        Number(userId)
-                    );
-
+                const response = await fetch(`${API_BASE_URL}/orders/` + Number(userId));
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Unable to load orders"
-                    );
-
+                    throw new Error("Unable to load orders");
                 }
 
-
-                const orders =
-                    await response.json();
-
-
+                const orders = await response.json();
                 deliveredProductIds = [];
 
-
                 orders.forEach(function(order) {
-
-                    if (
-                        order.status &&
-                        order.status.toLowerCase() ===
-                        "delivered"
-                    ) {
-
+                    if (order.status && order.status.toLowerCase() === "delivered") {
                         if (order.productIds) {
-
-                            const ids =
-                                order.productIds
-                                    .split(",")
-                                    .map(function(id) {
-                                        return Number(
-                                            id.trim()
-                                        );
-                                    });
-
-                            ids.forEach(function(id) {
-
-                                if (
-                                    !deliveredProductIds.includes(id)
-                                ) {
-
-                                    deliveredProductIds.push(id);
-
-                                }
-
+                            const ids = order.productIds.split(",").map(function(id) {
+                                return Number(id.trim());
                             });
 
+                            ids.forEach(function(id) {
+                                if (!deliveredProductIds.includes(id)) {
+                                    deliveredProductIds.push(id);
+                                }
+                            });
                         }
-
                     }
-
                 });
 
-
             } catch (error) {
-
                 console.error(error);
-
                 deliveredProductIds = [];
             }
         }
-
-
 
         // =========================
         // LOAD PRODUCTS
         // =========================
-
         async function loadProducts() {
-
-            const productGrid =
-                document.getElementById(
-                    "productGrid"
-                );
-
+            const productGrid = document.getElementById("productGrid");
 
             try {
-
                 await loadDeliveredProducts();
 
-
-                const response =
-                    await fetch(
-                        "http://localhost:8080/products"
-                    );
-
+                const response = await fetch(`${API_BASE_URL}/products`);
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Failed to load products"
-                    );
-
+                    throw new Error("Failed to load products");
                 }
 
-
-                allProducts =
-                    await response.json();
-
-
+                allProducts = await response.json();
                 displayProducts(allProducts);
 
-
             } catch (error) {
-
                 console.error(error);
-
-                productGrid.innerHTML =
-                    "<p>Unable to load products from server.</p>";
+                productGrid.innerHTML = "<p>Unable to load products from server.</p>";
             }
         }
-
-
 
         // =========================
         // DISPLAY PRODUCTS
         // =========================
-
         async function displayProducts(products) {
-
-            const productGrid =
-                document.getElementById(
-                    "productGrid"
-                );
-
-
+            const productGrid = document.getElementById("productGrid");
             productGrid.innerHTML = "";
 
-
             if (products.length === 0) {
-
-                productGrid.innerHTML =
-                    "<p>No products found.</p>";
-
+                productGrid.innerHTML = "<p>No products found.</p>";
                 return;
             }
 
-
             for (const product of products) {
-
-                const productCard =
-                    document.createElement(
-                        "article"
-                    );
-
-
-                productCard.className =
-                    "product-card";
-
+                const productCard = document.createElement("article");
+                productCard.className = "product-card";
 
                 let imageHTML = "";
 
-
-                if (
-                    product.image &&
-                    product.image.trim() !== ""
-                ) {
-
+                if (product.image && product.image.trim() !== "") {
                     imageHTML = `
-
-                        <img
-                            src="${product.image}"
-                            alt="${product.name}"
-                            onerror="
-                                this.style.display='none';
-                                this.nextElementSibling.style.display='block';
-                            "
-                        >
-
-                        <div
-                            class="no-image"
-                            style="display:none;">
-
+                        <img src="${product.image}" alt="${product.name}" onerror="
+                            this.style.display='none';
+                            this.nextElementSibling.style.display='block';
+                        ">
+                        <div class="no-image" style="display:none;">
                             🛍️
-
                         </div>
-
                     `;
-
                 } else {
-
                     imageHTML = `
-
                         <div class="no-image">
-
                             🛍️
-
                         </div>
-
                     `;
                 }
-
-
 
                 // Get reviews
-
                 let reviews = [];
-
                 try {
-
-                    const reviewResponse =
-                        await fetch(
-                            "http://localhost:8080/reviews/product/" +
-                            product.id
-                        );
-
+                    const reviewResponse = await fetch(`${API_BASE_URL}/reviews/product/` + product.id);
 
                     if (reviewResponse.ok) {
-
-                        reviews =
-                            await reviewResponse.json();
-
+                        reviews = await reviewResponse.json();
                     }
-
                 } catch (error) {
-
                     console.error(error);
-
                 }
-
-
 
                 // Calculate rating
-
                 let averageRating = 0;
-
-
                 if (reviews.length > 0) {
-
                     let totalRating = 0;
-
-
                     reviews.forEach(function(review) {
-
-                        totalRating +=
-                            Number(review.rating);
-
+                        totalRating += Number(review.rating);
                     });
-
-
-                    averageRating =
-                        totalRating / reviews.length;
-
+                    averageRating = totalRating / reviews.length;
                 }
 
-
-
                 let reviewHTML = "";
-
 
                 // =========================
                 // REVIEWS DISPLAY
                 // =========================
-
                 if (reviews.length > 0) {
-
                     reviewHTML += `
-
                         <div class="review-section">
-
-                            <h4>
-                                Customer Reviews
-                            </h4>
-
+                            <h4>Customer Reviews</h4>
                             <div class="average-rating">
-
-                                ⭐
-                                ${averageRating.toFixed(1)}
-                                / 5
-
+                                ⭐ ${averageRating.toFixed(1)} / 5
                             </div>
-
                     `;
-
 
                     reviews.forEach(function(review) {
-
                         reviewHTML += `
-
                             <div class="review-item">
-
-                                <strong>
-                                    ⭐ ${review.rating}/5
-                                </strong>
-
-                                <p>
-                                    ${review.comment || ""}
-                                </p>
-
+                                <strong>⭐ ${review.rating}/5</strong>
+                                <p>${review.comment || ""}</p>
                             </div>
-
                         `;
-
                     });
 
-
-                    reviewHTML += `
-
-                        </div>
-
-                    `;
-
+                    reviewHTML += `</div>`;
                 }
-
-
 
                 // =========================
                 // REVIEW FORM
                 // =========================
-
-                if (
-                    deliveredProductIds.includes(
-                        Number(product.id)
-                    )
-                ) {
-
-                    const alreadyReviewed =
-                        reviews.some(function(review) {
-
-                            return Number(
-                                review.userId
-                            ) === Number(userId);
-
-                        });
-
+                if (deliveredProductIds.includes(Number(product.id))) {
+                    const alreadyReviewed = reviews.some(function(review) {
+                        return Number(review.userId) === Number(userId);
+                    });
 
                     if (alreadyReviewed) {
-
                         reviewHTML += `
-
                             <div class="review-section">
-
-                                <p class="already-reviewed">
-
-                                    ✓ You already reviewed this product.
-
-                                </p>
-
+                                <p class="already-reviewed">✓ You already reviewed this product.</p>
                             </div>
-
                         `;
-
                     } else {
-
                         reviewHTML += `
-
                             <div class="review-section">
-
-                                <h4>
-                                    Write a Review
-                                </h4>
-
+                                <h4>Write a Review</h4>
                                 <div class="review-form">
-
-                                    <label>
-                                        Rating
-                                    </label>
-
-                                    <select
-                                        id="rating-${product.id}">
-
-                                        <option value="5">
-                                            ⭐⭐⭐⭐⭐ - 5
-                                        </option>
-
-                                        <option value="4">
-                                            ⭐⭐⭐⭐ - 4
-                                        </option>
-
-                                        <option value="3">
-                                            ⭐⭐⭐ - 3
-                                        </option>
-
-                                        <option value="2">
-                                            ⭐⭐ - 2
-                                        </option>
-
-                                        <option value="1">
-                                            ⭐ - 1
-                                        </option>
-
+                                    <label>Rating</label>
+                                    <select id="rating-${product.id}">
+                                        <option value="5">⭐⭐⭐⭐⭐ - 5</option>
+                                        <option value="4">⭐⭐⭐⭐ - 4</option>
+                                        <option value="3">⭐⭐⭐ - 3</option>
+                                        <option value="2">⭐⭐ - 2</option>
+                                        <option value="1">⭐ - 1</option>
                                     </select>
 
+                                    <label>Comment</label>
+                                    <textarea id="comment-${product.id}" placeholder="Write your review..."></textarea>
 
-                                    <label>
-                                        Comment
-                                    </label>
-
-                                    <textarea
-                                        id="comment-${product.id}"
-                                        placeholder="Write your review...">
-                                    </textarea>
-
-
-                                    <button
-                                        type="button"
-                                        class="review-button"
-                                        onclick="submitReview(${product.id})">
-
+                                    <button type="button" class="review-button" onclick="submitReview(${product.id})">
                                         Submit Review
-
                                     </button>
-
                                 </div>
-
                             </div>
-
                         `;
-
                     }
-
                 } else {
-
                     reviewHTML += `
-
                         <div class="review-section">
-
-                            <p class="delivery-message">
-
-                                🚚 Review available after delivery.
-
-                            </p>
-
+                            <p class="delivery-message">🚚 Review available after delivery.</p>
                         </div>
-
                     `;
-
                 }
-
-
 
                 // =========================
                 // PRODUCT CARD
                 // =========================
-
                 productCard.innerHTML = `
-
                     <div class="product-image">
-
-                        <span>
-                            AVAILABLE
-                        </span>
-
-
-                        <button
-                            type="button"
-                            class="wishlist-button"
-                            onclick="addToWishlist(${product.id})">
-
+                        <span>AVAILABLE</span>
+                        <button type="button" class="wishlist-button" onclick="addToWishlist(${product.id})">
                             ♡
-
                         </button>
-
-
                         ${imageHTML}
-
                     </div>
-
 
                     <div class="product-details">
-
-                        <small>
-                            ROGASREE MART
-                        </small>
-
-
-                        <h3>
-                            ${product.name}
-                        </h3>
-
-
-                        <p>
-
-                            ${
-                                product.description ||
-                                "Quality product from ROGASREE MART."
-                            }
-
-                        </p>
-
+                        <small>ROGASREE MART</small>
+                        <h3>${product.name}</h3>
+                        <p>${product.description || "Quality product from ROGASREE MART."}</p>
 
                         <div class="product-bottom">
-
-                            <strong>
-                                ₹${product.price}
-                            </strong>
-
-
+                            <strong>₹${product.price}</strong>
                             <span>
-
-                                ${
-                                    reviews.length > 0
-                                    ? "★ " +
-                                      averageRating.toFixed(1)
-                                    : "★ 4.8"
-                                }
-
+                                ${reviews.length > 0 ? "★ " + averageRating.toFixed(1) : "★ 4.8"}
                             </span>
-
                         </div>
 
-
-                        <button
-                            type="button"
-                            onclick="addToCart(${product.id})"
-                            class="add-cart-button">
-
+                        <button type="button" onclick="addToCart(${product.id})" class="add-cart-button">
                             Add to Cart
-
                         </button>
 
-
                         ${reviewHTML}
-
                     </div>
-
                 `;
 
-
-                productGrid.appendChild(
-                    productCard
-                );
-
+                productGrid.appendChild(productCard);
             }
-
         }
-
-
 
         // =========================
         // SUBMIT REVIEW
         // =========================
-
         async function submitReview(productId) {
-
             if (!userId) {
-
                 alert("Please login first.");
-
                 return;
             }
 
-
-            const rating =
-                Number(
-                    document.getElementById(
-                        "rating-" + productId
-                    ).value
-                );
-
-
-            const comment =
-                document.getElementById(
-                    "comment-" + productId
-                ).value.trim();
-
+            const rating = Number(document.getElementById("rating-" + productId).value);
+            const comment = document.getElementById("comment-" + productId).value.trim();
 
             if (!comment) {
-
-                alert(
-                    "Please enter your review."
-                );
-
+                alert("Please enter your review.");
                 return;
             }
 
-
             try {
+                const checkResponse = await fetch(`${API_BASE_URL}/reviews/product/` + productId);
+                const existingReviews = await checkResponse.json();
 
-                // Check existing reviews again
-
-                const checkResponse =
-                    await fetch(
-                        "http://localhost:8080/reviews/product/" +
-                        productId
-                    );
-
-
-                const existingReviews =
-                    await checkResponse.json();
-
-
-                const alreadyReviewed =
-                    existingReviews.some(
-                        function(review) {
-
-                            return Number(
-                                review.userId
-                            ) === Number(userId);
-
-                        }
-                    );
-
+                const alreadyReviewed = existingReviews.some(function(review) {
+                    return Number(review.userId) === Number(userId);
+                });
 
                 if (alreadyReviewed) {
-
-                    alert(
-                        "You have already reviewed this product."
-                    );
-
+                    alert("You have already reviewed this product.");
                     await loadProducts();
-
                     return;
                 }
 
-
-
-                // Submit review
-
-                const response =
-                    await fetch(
-                        "http://localhost:8080/reviews",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-
-                                userId:
-                                    Number(userId),
-
-                                productId:
-                                    Number(productId),
-
-                                rating:
-                                    rating,
-
-                                comment:
-                                    comment
-
-                            })
-                        }
-                    );
-
+                const response = await fetch(`${API_BASE_URL}/reviews`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userId: Number(userId),
+                        productId: Number(productId),
+                        rating: rating,
+                        comment: comment
+                    })
+                });
 
                 if (!response.ok) {
-
-                    throw new Error(
-                        "Unable to submit review"
-                    );
-
+                    throw new Error("Unable to submit review");
                 }
 
-
-                alert(
-                    "Review submitted successfully!"
-                );
-
-
-                // Reload products
-
+                alert("Review submitted successfully!");
                 await loadProducts();
 
-
             } catch (error) {
-
                 console.error(error);
-
-                alert(
-                    "Unable to submit review."
-                );
+                alert("Unable to submit review.");
             }
-
         }
-
-
 
         // =========================
         // SEARCH PRODUCTS
         // =========================
-
         function searchProducts() {
+            const searchText = document.getElementById("searchInput").value.toLowerCase().trim();
 
-            const searchText =
-                document.getElementById(
-                    "searchInput"
-                ).value
-                .toLowerCase()
-                .trim();
+            const filteredProducts = allProducts.filter(function(product) {
+                const name = (product.name || "").toLowerCase();
+                const description = (product.description || "").toLowerCase();
 
+                return name.includes(searchText) || description.includes(searchText);
+            });
 
-            const filteredProducts =
-                allProducts.filter(
-                    function(product) {
-
-                        const name =
-                            (
-                                product.name || ""
-                            ).toLowerCase();
-
-
-                        const description =
-                            (
-                                product.description || ""
-                            ).toLowerCase();
-
-
-                        return (
-                            name.includes(searchText) ||
-                            description.includes(searchText)
-                        );
-
-                    }
-                );
-
-
-            displayProducts(
-                filteredProducts
-            );
-
+            displayProducts(filteredProducts);
         }
-
-
 
         // =========================
         // START
         // =========================
-
         window.onload = function() {
             loadProducts();
         };
-
-
     </script>
 
-
 </body>
-
 </html>
